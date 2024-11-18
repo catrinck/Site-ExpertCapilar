@@ -29,23 +29,33 @@ const Opcoes = styled.ul`
      align-items: center; /* Centraliza verticalmente as opções */
 `
 
-const LinkStyled = styled(Link)`
-  text-decoration: none; /* Remove o sublinhado */
-  color: inherit; /* Mantém a cor do texto definida no componente pai */
+const LinkStyled = styled.a`
+     text-decoration: none; /* Remove o sublinhado */
+     color: inherit; /* Mantém a cor do texto definida no componente pai */
+     cursor: pointer; /* Mostra o cursor de link */
+     &:hover {
+     color: #fff; /* Cor ao passar o mouse */
+     }
 `;
 
-const textoOpcoes = ['NOSSOS PROFISSIONAIS', 'AGENDAMENTOS DISPONÍVEIS', 'QUEM SOMOS']
-
-function OpcoesHeader() {
+const textoOpcoes = [
+     { texto: 'NOSSOS PROFISSIONAIS', href: '#profissionais' },
+     { texto: 'AGENDAMENTOS DISPONÍVEIS', href: '#agendamentos' },
+     { texto: 'QUEM SOMOS', href: '#quem-somos' }
+   ];
+   
+   function OpcoesHeader() {
      return (
           <Opcoes>
-               {textoOpcoes.map( (texto) => (
-                    <LinkStyled to={`/${texto.toLowerCase()}`}>
-                    <Opcao><p>{texto}</p></Opcao>
-                    </LinkStyled> 
-               ) ) }
+            {textoOpcoes.map(({ texto, href }, index) => (
+              <LinkStyled href={href} key={index}>
+                <Opcao>
+                  <p>{texto}</p>
+                </Opcao>
+              </LinkStyled>
+            ))}
           </Opcoes>
-     )
-}
-
-export default OpcoesHeader
+        );
+      }
+   
+export default OpcoesHeader;
