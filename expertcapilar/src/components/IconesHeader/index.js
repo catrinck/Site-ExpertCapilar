@@ -1,27 +1,40 @@
-import perfil from '../../assets/perfil.svg'
-import sacola from '../../assets/sacola.svg'
+import whatsapp from '../../assets/whatsapp.svg'
 import styled from 'styled-components'
 
-const Icone = styled.li`
-    margin-right: 40px;
-    width: 25px;
-`
+const IconeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 40px;
+`;
 
-const Icones = styled.ul`
-    display: flex;
-    align-items: center;
-`
+const IconeTexto = styled.p`
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  margin: 0 0 5px; 
+  text-align: center;
+`;
 
-const icones = [perfil, sacola]
+const Icone = styled.img`
+  width: 30px;
+`;
+
+const Icones = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+`;
 
 function IconesHeader() {
-     return (
-          <Icones>
-          {icones.map( (icone) => (
-            <Icone><img src={icone}></img></Icone>
-          ) ) }
-        </Icones>
-     )
+  return (
+    <Icones>
+      <IconeContainer>
+        <IconeTexto>Entre em contato</IconeTexto>
+        <Icone src={whatsapp} alt="WhatsApp" />
+      </IconeContainer>
+    </Icones>
+  );
 }
 
-export default IconesHeader
+export default IconesHeader;
