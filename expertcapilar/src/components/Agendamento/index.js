@@ -5,11 +5,19 @@ import ModalAgendamento from './modalAgendamento';
 import { horarios } from './horarios';
 import { profissionais } from '../Pesquisa/dadosProfissionais';
 
+/* @media = modificações para a versao mobile*/
+
+
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
   background: #fff;
+
+  @media (max-width: 768px) {
+    align-items: stretch; /* Estende o conteúdo para o tamanho total */
+  }
 `;
+
 
 const Titulo = styled.h2`
   color: #000;
@@ -17,6 +25,45 @@ const Titulo = styled.h2`
   font-size: 36px;
   text-align: center;
   margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    display: none;
+    }
+`;
+
+const CalendarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-top: 10px;
+    color: #333;
+  }
+
+  button {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    margin-bottom: 10px;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+      h2 {
+      margin-top: 5px;
+    }
+  @media (max-width: 768px) {
+    margin-bottom: 0px; /* Remove espaço extra entre calendário e cards */
+    width: 100%; /* Garante largura total no mobile */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para destacar */
+  }
 `;
 
 const CalendarContainer = styled.div`
@@ -50,12 +97,24 @@ const GradeHorarios = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Alinha com os barbeiros */
   gap: 20px;
+
+  @media (max-width: 768px) {
+
+    margin-top: 0px; /* Ajusta o espaço abaixo do calendário fixo */
+    order: 2;
+  }
 `;
 
+
+/* ColunaHorarios tambem exibe o nome do profissional */
 const ColunaHorarios = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
+  @media (max-width: 768px){
+    display: none;
+    }
 `;
 
 const Horario = styled.div`
@@ -71,6 +130,10 @@ const Horario = styled.div`
   &:hover {
     background: #e0f7fa;
     cursor: pointer;
+  
+  @media (max-width: 768px) {
+    font-size: 14px; /* Ajusta o texto para telas menores */
+    padding: 10px; /* Reduz o espaçamento */
   }
 `;
 
@@ -81,6 +144,7 @@ function Agendamentos() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [modalData, setModalData] = useState(null);
+
 
   // Função para abrir o modal de agendamento
   const handleHorarioClick = (horario, profissional) => {
