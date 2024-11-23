@@ -7,6 +7,7 @@ import { profissionais } from '../Pesquisa/dadosProfissionais';
 
 /* @media = modificações para a versao mobile*/
 
+
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
@@ -65,6 +66,33 @@ const CalendarContainer = styled.div`
   }
 `;
 
+const CalendarContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 0;
+
+  h2 {
+    font-size: 1rem;
+    font-weight: normal;
+    margin-top: 10px;
+    color: #333;
+  }
+
+  button {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+    margin-bottom: 10px;
+
+    &:hover {
+      color: #007bff;
+    }
+  }
+`;
+
 const GradeHorarios = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Alinha com os barbeiros */
@@ -110,17 +138,21 @@ const Horario = styled.div`
 `;
 
 
+
 function Agendamentos() {
   const [modalOpen, setModalOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [modalData, setModalData] = useState(null);
 
+
+  // Função para abrir o modal de agendamento
   const handleHorarioClick = (horario, profissional) => {
     setModalData({ profissional, horario, data: selectedDate.toLocaleDateString() });
     setModalOpen(true);
   };
 
+  // Função para confirmar o agendamento
   const handleConfirm = async (nome, telefone) => {
     const response = await fetch('http://localhost:8000/agendamentos', {
       method: 'POST',
