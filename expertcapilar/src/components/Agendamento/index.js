@@ -66,32 +66,6 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const CalendarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-
-  h2 {
-    font-size: 1rem;
-    font-weight: normal;
-    margin-top: 10px;
-    color: #333;
-  }
-
-  button {
-    font-size: 2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
-    margin-bottom: 10px;
-
-    &:hover {
-      color: #007bff;
-    }
-  }
-`;
 
 const GradeHorarios = styled.div`
   display: grid;

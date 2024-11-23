@@ -13,7 +13,7 @@ const Titulo = styled.h2`
   width: 100%;
 
   @media (max-width: 768px) {
-    margin-top: 0px;
+    margin-top: -580px;
     font-size: 30px;
   }
 `;

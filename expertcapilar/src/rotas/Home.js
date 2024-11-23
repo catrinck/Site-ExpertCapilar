@@ -16,6 +16,9 @@ const HomeContainer = styled.div`
       margin-top: 20px;
       order: 2; /* Define a seção Profissionais para aparecer depois */
     }
+    #quem-somos {
+      margin-top: 20px;
+      order: 3; /* Define a seção Quem Somos para aparecer depois */
   }
 `;
 
