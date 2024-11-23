@@ -1,6 +1,8 @@
 import whatsapp from '../../assets/whatsapp.svg'
 import styled from 'styled-components'
 
+
+/* ICONE DO WHATSAPP */
 const IconeContainer = styled.div`
   display: flex;
   flex-direction: column;
