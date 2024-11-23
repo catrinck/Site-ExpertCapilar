@@ -2,6 +2,7 @@ import Header from '../components/Header'
 import styled from 'styled-components'
 import Pesquisa from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
+import QuemSomos from '../components/QuemSomos'
 
 const HomeContainer = styled.div`
   width: 100vw;
@@ -24,6 +25,10 @@ function Home() {
         {/* Seção Agendamentos Disponíveis */}
         <div id="agendamentos">
           <Agendamentos />
+        </div>
+
+        <div id="quem-somos">
+          <QuemSomos />
         </div>
       </HomeContainer>
     </div>
