@@ -1,5 +1,5 @@
 {
-  "name": "alura-books",
+  "name": "expertcapilar",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -11,7 +11,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
-    "alura-books": "file:",
+    "expertcapilar": "file:",
     "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",
