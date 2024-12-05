@@ -4,11 +4,13 @@ import styled from 'styled-components';
 /* @media = modificacoes para a versao mobile */
 
 const LogoContainer = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 30px;
-  margin-right: 0px; /* Espaço entre a logo e as opções */
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Garante centralização */
+    max-width: 300px; /* Define um limite */
 `;
+
 
 const LogoImage = styled.img`
     margin-right: 10px;
@@ -18,11 +20,9 @@ const LogoImage = styled.img`
     height: auto;
 
     @media (max-width: 768px) {
-        margin-right: center;
+        margin-right: 0;
         max-height:130px;
         max-width: 130px;
-        width: auto;
-        height: auto;
 }
 `
 

@@ -11,17 +11,11 @@ import { profissionais } from '../Pesquisa/dadosProfissionais';
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
-<<<<<<< HEAD
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-=======
   background: #fff;
 
   @media (max-width: 768px) {
     align-items: stretch; /* Estende o conteúdo para o tamanho total */
   }
->>>>>>> 7eedbcbe01e301bb8c8365dc116353c84f399a27
 `;
 
 
@@ -75,12 +69,6 @@ const CalendarContainer = styled.div`
 
 const GradeHorarios = styled.div`
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(4, 1fr); /* Altera o número de colunas para se alinhar com os profissionais */
-  gap: 20px; /* Espaço entre as colunas */
-  width: 100%; /* Garante que ocupe toda a largura disponível */
-  justify-items: center; /* Centraliza os itens no grid */
-=======
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Alinha com os barbeiros */
   gap: 20px;
 
@@ -89,7 +77,6 @@ const GradeHorarios = styled.div`
     margin-top: 0px; /* Ajusta o espaço abaixo do calendário fixo */
     order: 2;
   }
->>>>>>> 7eedbcbe01e301bb8c8365dc116353c84f399a27
 `;
 
 

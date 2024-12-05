@@ -16,14 +16,15 @@ const HomeContainer = styled.div`
       margin-top: 20px;
       order: 2; /* Define a seção Profissionais para aparecer depois */
     }
-    #quem-somos{
-      order: 3; /* Define a seção Quem somos para aparecer por ultimo */
+    #quem-somos {
+      order: 3; /* Define a seção Quem Somos para aparecer por último */
+    }
   }
 `;
 
 function Home() {
   return (
-    <div>
+    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       <Header />
       <HomeContainer>
         {/* Seção Nossos Profissionais */}
