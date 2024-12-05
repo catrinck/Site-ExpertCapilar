@@ -146,7 +146,7 @@ function Agendamentos({data}) {
     });
 
     try {
-        const response = await fetch("http://localhost:8000/agendamentos", {
+        const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
