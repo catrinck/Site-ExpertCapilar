@@ -4,7 +4,7 @@ import Home from './rotas/Home';
 import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Header from './components/Header';
+
 
 const GlobalStyle = createGlobalStyle`
   body {

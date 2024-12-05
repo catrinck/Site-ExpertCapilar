@@ -72,32 +72,6 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const CalendarContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 20px 0;
-
-  h2 {
-    font-size: 1rem;
-    font-weight: normal;
-    margin-top: 10px;
-    color: #333;
-  }
-
-  button {
-    font-size: 2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #333;
-    margin-bottom: 10px;
-
-    &:hover {
-      color: #007bff;
-    }
-  }
-`;
 
 const GradeHorarios = styled.div`
   display: grid;
@@ -152,7 +126,7 @@ const Horario = styled.div`
 
 
 
-function Agendamentos() {
+function Agendamentos({data}) {
   const [modalOpen, setModalOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -161,32 +135,60 @@ function Agendamentos() {
 
   // Função para abrir o modal de agendamento
   const handleHorarioClick = (horario, profissional) => {
-    setModalData({ profissional, horario, data: selectedDate.toLocaleDateString() });
+    const horarioInicio = horario.split(' - ')[0];
+    const formattedDate = selectedDate.toISOString().split('T')[0];
+    const data = {
+        profissional,
+        horario: horarioInicio,
+        data: formattedDate,
+    };
+
+    console.log("Dados enviados para o modal:", data); // Verificar valores
+    setModalData(data);
     setModalOpen(true);
-  };
+};
 
   // Função para confirmar o agendamento
   const handleConfirm = async (nome, telefone) => {
-    const response = await fetch('http://localhost:8000/agendamentos', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        cliente_nome: nome,
-        cliente_telefone: telefone,
+    console.log("Tentando criar agendamento com:", {
+        nome,
+        telefone,
         data_agendamento: modalData.data,
         hora_agendamento: modalData.horario,
         profissional: modalData.profissional,
-      }),
     });
 
-    if (response.ok) {
-      alert('Agendamento criado com sucesso!');
-    } else {
-      alert('Erro ao criar agendamento.');
-    }
+    try {
+        const response = await fetch("http://localhost:8000/agendamentos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cliente_nome: nome,
+                cliente_telefone: telefone,
+                data_agendamento: modalData.data,
+                hora_agendamento: modalData.horario,
+                profissional: modalData.profissional,
+            }),
+        });
 
-    setModalOpen(false);
-  };
+        console.log("Resposta do servidor:", response);
+
+        if (response.ok) {
+            const responseData = await response.json(); // Parseia a resposta se necessário
+            console.log("Dados retornados:", responseData);
+            alert("Agendamento criado com sucesso!");
+        } else {
+            const errorText = await response.text(); // Captura mensagem de erro do servidor
+            console.error("Erro no servidor:", errorText);
+            alert("Erro ao criar agendamento. Tente novamente.");
+        }
+    } catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Erro na comunicação com o servidor.");
+    }
+};
 
   return (
     <Section id="agendamentos">

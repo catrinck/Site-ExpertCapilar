@@ -4,7 +4,6 @@ import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
 import QuemSomos from '../components/QuemSomos'
 
-
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -17,6 +16,8 @@ const HomeContainer = styled.div`
       margin-top: 20px;
       order: 2; /* Define a seção Profissionais para aparecer depois */
     }
+    #quem-somos{
+      order: 3; /* Define a seção Quem somos para aparecer por ultimo */
   }
 `;
 
