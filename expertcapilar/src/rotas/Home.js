@@ -34,6 +34,7 @@ function Home() {
         <div id="agendamentos">
           <Agendamentos />
         </div>
+
         <div id="quem-somos">
           <QuemSomos />
         </div>
