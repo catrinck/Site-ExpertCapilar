@@ -39,23 +39,33 @@ const LinkStyled = styled.a`
 `;
 
 const textoOpcoes = [
-     { texto: 'NOSSOS PROFISSIONAIS', href: '#profissionais' },
-     { texto: 'AGENDAMENTOS DISPONÍVEIS', href: '#agendamentos' },
-     { texto: 'QUEM SOMOS', href: '#quem-somos' }
-   ];
+  { texto: 'NOSSOS PROFISSIONAIS', href: '#profissionais', externo: true },
+  { texto: 'AGENDAMENTOS DISPONÍVEIS', href: '#agendamentos', externo: true },
+  { texto: 'QUEM SOMOS', href: '/quem-somos', externo: false } // Para uma nova página
+];
    
-   function OpcoesHeader() {
-     return (
-          <Opcoes>
-            {textoOpcoes.map(({ texto, href }, index) => (
-              <LinkStyled href={href} key={index}>
-                <Opcao>
-                  <p>{texto}</p>
-                </Opcao>
-              </LinkStyled>
-            ))}
-          </Opcoes>
-        );
-      }
+function OpcoesHeader() {
+  return (
+    <Opcoes>
+      {textoOpcoes.map(({ texto, href, externo }, index) => (
+        externo ? (
+          // Links internos (rolagem na página)
+          <LinkStyled as="a" href={href} key={index}>
+            <Opcao>
+              <p>{texto}</p>
+            </Opcao>
+          </LinkStyled>
+        ) : (
+          // Links externos (outras páginas)
+          <LinkStyled as={Link} to={href} key={index}>
+            <Opcao>
+              <p>{texto}</p>
+            </Opcao>
+          </LinkStyled>
+        )
+      ))}
+    </Opcoes>
+  );
+}
    
 export default OpcoesHeader;

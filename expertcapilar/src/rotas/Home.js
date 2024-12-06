@@ -1,8 +1,10 @@
-import Header from '../components/Header'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
-import QuemSomos from '../components/QuemSomos'
+import QuemSomos from '../components/QuemSomos';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -35,7 +37,7 @@ function Home() {
         <div id="agendamentos">
           <Agendamentos />
         </div>
-
+        {/* Botão "Quem Somos" */}
         <div id="quem-somos">
           <QuemSomos />
         </div>
