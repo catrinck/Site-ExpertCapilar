@@ -5,6 +5,9 @@ const Opcao = styled.li`
      font-size: 22px;
      font-family: 'Poppins', sans-serif;
      display: flex;
+     justify-content: center;
+     align-items: center;
+     text-align: center;
      min-width: 120px;
      padding: 0 30px;
      cursor: pointer;
@@ -19,16 +22,12 @@ const Opcao = styled.li`
 `
 
 const Opcoes = styled.ul`
-    display: flex;
-    flex-wrap: wrap; /* Quebra em linhas se ultrapassar o espaço */
-    justify-content: center;
-    list-style: none;
-    padding: 0;
-    margin: 0 auto;
-    max-width: 100%; /* Garante que não escape */
-`;
-
-
+     display: flex;
+     list-style: none;
+     padding: 0;
+     margin: 0;
+     align-items: center; /* Centraliza verticalmente as opções */
+`
 
 const LinkStyled = styled.a`
      text-decoration: none; /* Remove o sublinhado */
