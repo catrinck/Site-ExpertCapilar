@@ -5,6 +5,7 @@ import QuemSomosPage from './rotas/quemsomos'; // Importe a página Quem Somos
 import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async'; 
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -31,6 +32,7 @@ const GlobalStyle = createGlobalStyle`
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <HelmetProvider> {/* Envolvendo com HelmetProvider */}
     <GlobalStyle />
     <BrowserRouter>
       <Routes>
@@ -38,6 +40,7 @@ root.render(
         <Route path="/quem-somos" element={<QuemSomosPage />} /> {/* Rota para QuemSomosPage */}
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );
 

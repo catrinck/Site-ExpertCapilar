@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
 import QuemSomos from '../components/QuemSomos';
+import { Helmet } from 'react-helmet-async';
 
 const HomeContainer = styled.div`
   display: flex;
@@ -27,6 +28,10 @@ const HomeContainer = styled.div`
 function Home() {
   return (
     <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
+      <Helmet>
+        <title>ExpertCapilar</title>
+        <meta name="description" content="Bem-vindo ao nosso site!" />
+      </Helmet>
       <Header />
       <HomeContainer>
         {/* Seção Nossos Profissionais */}
