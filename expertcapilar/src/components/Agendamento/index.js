@@ -4,6 +4,7 @@ import ModalCalendar from './modalCalendar';
 import ModalAgendamento from './modalAgendamento';
 import { horarios } from './horarios';
 import { profissionais } from '../Pesquisa/dadosProfissionais';
+import Button from './button';
 
 /* @media = modificações para a versao mobile*/
 
@@ -182,7 +183,7 @@ function Agendamentos({data}) {
       <Titulo>Horários Disponíveis</Titulo>
       <CalendarContainer>
         <button onClick={() => setCalendarOpen(true)}>
-          <span role="img" aria-label="calendar">📅</span>
+          <span role="img" aria-label="calendar"><Button /></span>
         </button>
         <h2>Data Selecionada: {selectedDate.toLocaleDateString()}</h2>
       </CalendarContainer>
