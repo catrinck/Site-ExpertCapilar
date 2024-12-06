@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import ImageCarousel from 'C:\\Users\\catri\\ExpertCapilar\\expertcapilar\\src\\assets\\ImagesCarousel.js'; // Importe o carrossel
+import ImageCarousel from '../components/images/index.js';
 
 const QuemSomosContainer = styled.div`
+  background: #121212;
+  color: #ffffff;
   text-align: center;
   padding: 20px;
+  width: 100%;
 
   h1 {
     font-size: 2.5rem;
@@ -25,9 +28,16 @@ const QuemSomosContainer = styled.div`
   }
 `;
 
+// New container for carousel
+const CarouselSection = styled.div`
+  background: #121212;
+  width: 100%;
+  padding: 20px 0;
+`;
+
 function QuemSomosPage() {
   return (
-    <div>
+    <div style={{ background: '#121212', minHeight: '100vh' }}>
       <QuemSomosContainer>
         <h1>Sobre Nós</h1>
         <p>Somos uma empresa especializada em cuidar do seu cabelo!</p>
@@ -36,8 +46,9 @@ function QuemSomosPage() {
         <h2>Localização</h2>
       </QuemSomosContainer>
 
-      {/* Carrossel de imagens */}
-      <ImageCarousel />
+      <CarouselSection>
+        <ImageCarousel />
+      </CarouselSection>
     </div>
   );
 }

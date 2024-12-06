@@ -17,12 +17,12 @@ const HeaderContatiner = styled.header`
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
-    
 
     @media (max-width: 768px) {
-        flex-direction: column;
+        flex-direction: row;
         height: auto;
         padding: 10px;
+        justify-content: space-between; 
     }
 `;
 
@@ -32,7 +32,7 @@ const LogoContainer = styled.div`
     align-items: center;
 
     @media (max-width: 768px) {
-        justify-content: center;
+        flex: initial; 
     }
 `;
 
@@ -42,7 +42,7 @@ const OpcoesContainer = styled.div`
     justify-content: center;
 
     @media (max-width: 768px) {
-        display: none; /* Esconde as opções em telas menores */
+        display: none;
     }
 `;
 
@@ -52,7 +52,8 @@ const IconesContainer = styled.div`
     justify-content: flex-end;
 
     @media (max-width: 768px) {
-        display: none; /* Esconde os ícones em telas menores */
+        display: flex; // Show icons on mobile
+        flex: initial; // Remove flex grow
     }
 `;
 

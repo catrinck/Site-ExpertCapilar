@@ -8,20 +8,22 @@ import Button from './button';
 
 /* @media = modificações para a versao mobile*/
 
-
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
-  background: #fff;
+  background: #121212;
+  color: #ffffff;
 
   @media (max-width: 768px) {
-    align-items: stretch; /* Estende o conteúdo para o tamanho total */
+    padding: 20px;
+    min-height: auto; 
   }
 `;
 
 
+
 const Titulo = styled.h2`
-  color: #000;
+  color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
   text-align: center;
@@ -42,7 +44,7 @@ const CalendarContainer = styled.div`
     font-size: 1rem;
     font-weight: normal;
     margin-top: 10px;
-    color: #333;
+    color: #ffffff;
   }
 
   button {
@@ -50,7 +52,7 @@ const CalendarContainer = styled.div`
     background: none;
     border: none;
     cursor: pointer;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 10px;
 
     &:hover {
@@ -94,8 +96,9 @@ const ColunaHorarios = styled.div`
 
 const Horario = styled.div`
   padding: 15px;
-  background: #fff; /* Fundo claro */
-  border: 1px solid #ddd;
+  background: #2c2c2c;
+  border: 1px solid #404040;
+  color: #ffffff;
   border-radius: 8px;
   text-align: center;
   font-family: 'Poppins', sans-serif;
@@ -103,7 +106,7 @@ const Horario = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: #e0f7fa; /* Fundo diferente ao passar o mouse */
+    background: #3d3d3d;
     cursor: pointer;
   
   @media (max-width: 768px) {

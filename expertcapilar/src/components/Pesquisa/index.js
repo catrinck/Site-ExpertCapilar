@@ -5,20 +5,22 @@ import { horarios } from '../Agendamento/horarios';
 export { Pesquisa };
 
 
+const TituloContainer = styled.div`
+  background-color: #121212;
+  padding: 30px 0;
+  width: 100%;
+`;
+
 const Titulo = styled.h2`
-  color: #000;
+  color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
   text-align: center;
   width: 100%;
-
-  @media (max-width: 768px) {
-    margin-top: -560px;
-    font-size: 30px;
-  }
 `;
 
 const ProfissionaisContainer = styled.div`
+  background: #121212;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
@@ -37,23 +39,22 @@ const ProfissionalCard = styled.div`
   position: relative;
   width: 100%;
   height: 600px;
-
-  @media (max-width: 768px) {
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-    transform: ${({ flipped }) => (flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
-    cursor: pointer; /* Indica que o card é clicável */
-  }
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  transform: ${({ flipped }) => (flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
+  cursor: pointer;
 `;
 
+
 const CardFront = styled.div`
+  background: #2D2D2D;
+  color: #FFFFFF;;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,11 +63,12 @@ const CardFront = styled.div`
 `;
 
 const CardBack = styled.div`
+  background: #1E1E1E;
+  color: #FFFFFF;
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transform: rotateY(180deg);
@@ -108,54 +110,48 @@ const Foto = styled.img`
 
 
 const Info = styled.p`
+  color: #B3B3B3;
   font-size: 14px;
-  color: #555;
   margin: 5px 0;
-
-  @media (max-width: 768px){
-  font-size: 20px;
-}
 `;
 
 
-/* HorarioCard e Seta apenas para a versao mobile */
 const HorarioCard = styled.div`
-  @media (max-width: 768px) {
-    font-size: 18px;
-    padding: 10px 15px;
-    background: #f0f8ff;
-    border: 1px solid #007bff;
-    border-radius: 6px;
-    text-align: center;
-    cursor: pointer;
-    margin: 5px;
-
-    &:hover {
-      background: #d0e7ff;
-      border-color: #0056b3;
-    }
+  background: #2D2D2D;
+  color: #FFFFFF;
+  border: 1px solid #404040;
+  padding: 13px;
+  margin: 5px;
+  border-radius: 6px;
+  
+  &:hover {
+    background: #404040;
+  }
 `;
 
 const Seta = styled.div`
-  @media (max-width: 768px) {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 24px; /* Aumenta o tamanho da seta */
-    width: 50px; /* Largura da área clicável */
-    height: 50px; /* Altura da área clicável */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.1); /* Fundo sutil para destacar */
-    border-radius: 50%; /* Formato circular */
-    cursor: pointer; /* Indica interatividade */
-    user-select: none; /* Impede seleção do texto da seta */
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #FFFFFF;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 `;
 
 function Pesquisa() {
   const [flippedCards, setFlippedCards] = useState({});
+  
   const toggleCardFlip = (index) => {
     setFlippedCards((prevState) => ({
       ...prevState,
@@ -165,7 +161,9 @@ function Pesquisa() {
 
   return (
     <div>
+      <TituloContainer>
         <Titulo>Conheça nossos profissionais</Titulo>
+      </TituloContainer>
       <ProfissionaisContainer>
         {profissionais.map((profissional, index) => (
           <CardWrapper key={index}>
