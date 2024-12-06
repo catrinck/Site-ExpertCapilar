@@ -6,6 +6,7 @@ import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
 import QuemSomos from '../components/QuemSomos';
 import { Helmet } from 'react-helmet-async';
+import ImageCarousel from 'C:\\Users\\catri\\ExpertCapilar\\expertcapilar\\src\\assets\\ImagesCarousel.js'; // Importe o carrossel
 
 const HomeContainer = styled.div`
   display: flex;
@@ -47,6 +48,7 @@ function Home() {
           <QuemSomos />
         </div>
       </HomeContainer>
+      <ImageCarousel />
     </div>
   );
 }
