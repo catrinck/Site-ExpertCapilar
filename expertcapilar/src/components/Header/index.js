@@ -1,4 +1,5 @@
-import Logo from '../Logo';
+import Logo from '../Logo/quemsomosLogo';
+import HeaderLogo from '../Logo/headerLogo';
 import OpcoesHeader from '../OpcoesHeader';
 import IconesHeader from '../IconesHeader';
 import styled from 'styled-components';
@@ -52,11 +53,10 @@ const IconesContainer = styled.div`
     justify-content: flex-end;
 
     @media (max-width: 768px) {
-        display: flex; // Show icons on mobile
-        flex: initial; // Remove flex grow
+        display: flex; 
+                flex: initial; 
     }
 `;
-
 
 const AppContainer = styled.div`
     margin: 0;
@@ -71,9 +71,9 @@ function Header() {
         <AppContainer>
             <HeaderContatiner>
                 <LogoContainer>
-                    <Link to='/'>
-                        <Logo />
-                    </Link>
+                <Link to='/'>
+                    <HeaderLogo />
+                </Link>
                 </LogoContainer>
                 <OpcoesContainer>
                     <OpcoesHeader />

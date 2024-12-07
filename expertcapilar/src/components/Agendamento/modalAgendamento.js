@@ -123,35 +123,49 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
       setTelefone(''); // Zera o telefone
       setShouldRender(true);
     } else {
-      const timer = setTimeout(() => setShouldRender(false), 400); // Espera a animação acabar
+      const timer = setTimeout(() => setShouldRender(false), 80); // Espera a animação acabar
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
   const handleConfirm = () => {
     const telefoneSemMascara = telefone.replace(/\D/g, '');
+    
+    // Validações
     if (telefoneSemMascara.length !== 11) {
-      setNotification('Por favor, preencha o número completo no formato (XX) XXXXX-XXXX.');
-      return;
+      setNotification({
+        message: 'Por favor, preencha o número completo no formato (DD) 12345-6789',
+        type: 'error', // Define como erro
+      });
+      return; // Não envia os dados
     }
 
     if (!nome.trim()) {
-      setNotification('Por favor, preencha o nome.');
-      return;
+      setNotification({
+        message: 'Por favor, preencha o nome.',
+        type: 'error', // Define como erro
+      });
+      return; // Não envia os dados
     }
 
-    onConfirm(nome, telefone); // Confirma os dados
-    setNotification('Agendamento criado com sucesso!'); // Exibe mensagem de sucesso
+    // Se tudo estiver OK
+    onConfirm(nome, telefone); // Chama a função de confirmação
+    setNotification({
+      message: 'Agendamento criado com sucesso!',
+      type: 'success', // Define como sucesso
+    });
   };
 
   return (
     <>
       {notification && (
         <Notification
-          message={notification}
-          onClose={() => setNotification(null)}
+          message={notification.message}
+          type={notification.type} // Passa o tipo para estilizar (erro ou sucesso)
+          onClose={() => setNotification(null)} // Fecha após 3 segundos
         />
       )}
+
       {shouldRender && (
         <ModalContainer isOpen={isOpen} onClick={onClose}>
           <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
