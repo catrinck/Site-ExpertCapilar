@@ -8,7 +8,6 @@ import Button from './button';
 
 const Section = styled.section`
   padding: 50px 20px;
-  min-height: 100vh;
   background: #121212;
   color: #ffffff;
 
@@ -56,51 +55,8 @@ const CalendarContainer = styled.div`
 `;
 
 function Agendamentos({data}) {
-  const [modalOpen, setModalOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [modalData, setModalData] = useState(null);
-
-  const handleHorarioClick = (horario, profissional) => {
-    const horarioInicio = horario.split(' - ')[0];
-    const formattedDate = selectedDate.toISOString().split('T')[0];
-    const data = {
-      profissional,
-      horario: horarioInicio,
-      data: formattedDate,
-    };
-
-    setModalData(data);
-    setModalOpen(true);
-  };
-
-  const handleConfirm = async (nome, telefone) => {
-    try {
-      const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cliente_nome: nome,
-          cliente_telefone: telefone,
-          data_agendamento: modalData.data,
-          hora_agendamento: modalData.horario,
-          profissional: modalData.profissional,
-        }),
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        alert("Agendamento criado com sucesso!");
-      } else {
-        const errorText = await response.text();
-        alert("Erro ao criar agendamento. Tente novamente.");
-      }
-    } catch (error) {
-      alert("Erro na comunicação com o servidor.");
-    }
-  };
 
   return (
     <Section id="agendamentos">
@@ -108,19 +64,12 @@ function Agendamentos({data}) {
         <button onClick={() => setCalendarOpen(true)}>
           <span role="img" aria-label="calendar"><Button /></span>
         </button>
-        <h2>Data Selecionada: {selectedDate.toLocaleDateString()}</h2>
       </CalendarContainer>
       <ModalCalendar
         isOpen={calendarOpen}
         onClose={() => setCalendarOpen(false)}
         selectedDate={selectedDate}
         setSelectedDate={setSelectedDate}
-      />
-      <ModalAgendamento
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onConfirm={handleConfirm}
-        data={modalData}
       />
     </Section>
   );

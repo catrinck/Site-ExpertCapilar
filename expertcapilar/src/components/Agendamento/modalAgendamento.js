@@ -91,26 +91,47 @@ const Button = styled.button`
   }
 `;
 
+const CloseButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+`;
+
+
 function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
      const [nome, setNome] = React.useState('');
      const [telefone, setTelefone] = React.useState('');
      const [shouldRender, setShouldRender] = React.useState(isOpen);
 
      React.useEffect(() => {
-          if (isOpen) {
-            setShouldRender(true);
-          } else {
-            const timer = setTimeout(() => setShouldRender(false), 400); // Espera a animação acabar
-            return () => clearTimeout(timer); // Limpa o timeout ao desmontar
-          }
-        }, [isOpen]);
-      
-        if (!shouldRender) return null;
+      if (isOpen) {
+        setNome(''); // Zera o nome
+        setTelefone(''); // Zera o telefone
+        setShouldRender(true);
+      } else {
+        const timer = setTimeout(() => setShouldRender(false), 400); // Espera a animação acabar
+        return () => clearTimeout(timer); // Limpa o timeout ao desmontar
+      }
+    }, [isOpen]);
+  
+    if (!shouldRender) return null;
    
    
         return (
           <ModalContainer isOpen={isOpen} onClick={onClose}>
             <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+              <CloseButton onClick={onClose}>&times;</CloseButton>
               <h2>Agendar com {data?.profissional}</h2>
               <p>Data: {data?.data}</p>
               <p>Horário: {data?.horario}</p>
