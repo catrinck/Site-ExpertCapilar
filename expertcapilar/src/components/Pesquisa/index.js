@@ -1,9 +1,10 @@
+import ModalAgendamento from '../Agendamento/modalAgendamento';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Notification from '../Notification/index'; 
 import { profissionais } from './dadosProfissionais';
 import { horarios } from '../Agendamento/horarios';
 export { Pesquisa };
-
 
 const TituloContainer = styled.div`
   background-color: #121212;
@@ -151,12 +152,119 @@ const Seta = styled.div`
 
 function Pesquisa() {
   const [flippedCards, setFlippedCards] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [confirmados, setConfirmados] = useState([]); // Estado para armazenar agendamentos confirmados
+  const [notification, setNotification] = useState(null);
+
+
+  // Buscar agendamentos confirmados no banco
+  useEffect(() => {
+    const fetchConfirmados = async () => {
+      try {
+        const dataAtual = new Date().toISOString().split("T")[0];
+        const profissionaisNomes = profissionais.map((prof) => prof.nome); // Pega os nomes dos profissionais
+        let horariosConfirmados = {}; // Objeto para armazenar os horários confirmados por profissional
   
+        for (const profissional of profissionaisNomes) {
+          const response = await fetch(
+            `https://expert-capilar-backend.onrender.com/agendamentos/disponibilidade?data_agendamento=${dataAtual}&profissional=${profissional}`
+          );
+          const data = await response.json();
+  
+          console.log(`Resposta da API para ${profissional}:`, data);
+  
+          if (data && Array.isArray(data.horariosDisponiveis)) {
+            horariosConfirmados[profissional] = data.horariosDisponiveis;
+          } else {
+            console.error(`Erro para ${profissional}: Dados inválidos`, data);
+            horariosConfirmados[profissional] = []; // Evita quebra
+          }
+        }
+  
+        setConfirmados(horariosConfirmados); // Atualiza o estado com os horários por profissional
+      } catch (error) {
+        console.error("Erro ao buscar horários disponíveis:", error);
+        setConfirmados({}); // Garante que seja um objeto vazio em caso de erro
+      }
+    };
+  
+    fetchConfirmados();
+  }, []);
+  
+
   const toggleCardFlip = (index) => {
     setFlippedCards((prevState) => ({
       ...prevState,
       [index]: !prevState[index],
     }));
+  };
+
+  const openModal = (profissional, horario) => {
+    const horarioFormatado = horario.split(" - ")[0];
+    const formattedDate = new Date().toISOString().split("T")[0]; // Data atual formatada
+
+    setModalData({
+      profissional: profissional.nome,
+      horario: horarioFormatado,
+      data: formattedDate,
+    });
+
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleConfirm = async (nome, telefone) => {
+    console.log("Tentando criar agendamento com:", {
+      cliente_nome: nome,
+      cliente_telefone: telefone,
+      data_agendamento: modalData.data,
+      hora_agendamento: modalData.horario,
+      profissional: modalData.profissional,
+    });
+
+    try {
+      const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cliente_nome: nome,
+          cliente_telefone: telefone,
+          data_agendamento: modalData.data,
+          hora_agendamento: modalData.horario,
+          profissional: modalData.profissional,
+        }),
+      });
+
+      if (response.ok) {
+        setNotification("Agendamento criado com sucesso!"); // Substitui o alert
+      } else {
+        const errorText = await response.text();
+        setNotification(`Erro ao criar agendamento: ${errorText}`);
+      }
+    } catch (error) {
+      setNotification("Erro na comunicação com o servidor. Tente novamente mais tarde.");
+    }
+
+    closeModal();
+  };
+
+  // Verificar se um horário está confirmado
+  const isHorarioConfirmado = (horario, profissional) => {
+    if (!confirmados[profissional] || !Array.isArray(confirmados[profissional])) {
+      console.error(`Horários não carregados para ${profissional}:`, confirmados[profissional]);
+      return false; // Evita erros
+    }
+  
+    console.log(`Checando se ${horario} está disponível para ${profissional}:`, confirmados[profissional]);
+  
+    const horarioInicio = horario.split(' - ')[0];
+    return !confirmados[profissional].includes(horarioInicio); // Verifica se o horário está indisponível
   };
 
   return (
@@ -183,10 +291,34 @@ function Pesquisa() {
                 </Seta>
               </CardFront>
               <CardBack>
-                <Nome>Horários Disponíveis</Nome>
-                {horarios.map((horario, i) => (
-                  <HorarioCard key={i}>{horario}</HorarioCard>
-                ))}
+                <Nome>Horários Disponíveis Hoje</Nome>
+                {horarios.map((horario, i) => {
+                  const horarioDesabilitado = isHorarioConfirmado(horario, profissional.nome); // Passa o nome do profissional
+
+                  console.log(`Horário ${horario} (${profissional.nome}): Desabilitado? ${horarioDesabilitado}`);
+
+                  return (
+                    <HorarioCard
+                      key={i}
+                      onClick={
+                        !horarioDesabilitado
+                          ? () => openModal(profissional, horario)
+                          : null
+                      }
+                      style={{
+                        cursor: horarioDesabilitado ? "not-allowed" : "pointer",
+                        opacity: horarioDesabilitado ? 0.5 : 1,
+                      }}
+                      title={
+                        horarioDesabilitado
+                          ? "Este horário já está confirmado."
+                          : "Clique para agendar"
+                      }
+                    >
+                      {horario}
+                    </HorarioCard>
+                  );
+                })}
                 <Seta
                   onClick={(e) => {
                     e.stopPropagation();
@@ -200,6 +332,13 @@ function Pesquisa() {
           </CardWrapper>
         ))}
       </ProfissionaisContainer>
+
+      <ModalAgendamento
+        isOpen={modalOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirm}
+        data={modalData}
+      />
     </div>
   );
 }
