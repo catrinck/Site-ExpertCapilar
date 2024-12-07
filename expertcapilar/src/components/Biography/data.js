@@ -11,7 +11,7 @@ export const biographyData = [
     },
     {
       image: 'https://via.placeholder.com/400x400',
-      title: 'Yohann do carmo',
+      title: 'Yohann do Carmo',
       text: 'Com anos de experiência, sou especializado em cortes modernos e clássicos, sempre atualizado nas últimas tendências. Ofereço cortes precisos, barboterapia relaxante e atendimento personalizado. Agende comigo e saia com um visual renovado e de confiança!'
     },
     {
