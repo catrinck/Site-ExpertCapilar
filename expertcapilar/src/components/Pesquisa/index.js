@@ -1,24 +1,26 @@
+import ModalAgendamento from '../Agendamento/modalAgendamento';
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { profissionais } from './dadosProfissionais';
 import { horarios } from '../Agendamento/horarios';
 export { Pesquisa };
 
+const TituloContainer = styled.div`
+  background-color: #121212;
+  padding: 30px 0;
+  width: 100%;
+`;
 
 const Titulo = styled.h2`
-  color: #000;
+  color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
   text-align: center;
   width: 100%;
-
-  @media (max-width: 768px) {
-    margin-top: -560px;
-    font-size: 30px;
-  }
 `;
 
 const ProfissionaisContainer = styled.div`
+  background: #121212;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
@@ -37,23 +39,22 @@ const ProfissionalCard = styled.div`
   position: relative;
   width: 100%;
   height: 600px;
-
-  @media (max-width: 768px) {
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-    transform: ${({ flipped }) => (flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
-    cursor: pointer; /* Indica que o card é clicável */
-  }
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  transform: ${({ flipped }) => (flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
+  cursor: pointer;
 `;
 
+
 const CardFront = styled.div`
+  background: #2D2D2D;
+  color: #FFFFFF;;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -62,11 +63,12 @@ const CardFront = styled.div`
 `;
 
 const CardBack = styled.div`
+  background: #1E1E1E;
+  color: #FFFFFF;
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transform: rotateY(180deg);
@@ -108,54 +110,86 @@ const Foto = styled.img`
 
 
 const Info = styled.p`
+  color: #B3B3B3;
   font-size: 14px;
-  color: #555;
   margin: 5px 0;
-
-  @media (max-width: 768px){
-  font-size: 20px;
-}
 `;
 
 
-/* HorarioCard e Seta apenas para a versao mobile */
 const HorarioCard = styled.div`
-  @media (max-width: 768px) {
-    font-size: 18px;
-    padding: 10px 15px;
-    background: #f0f8ff;
-    border: 1px solid #007bff;
-    border-radius: 6px;
-    text-align: center;
-    cursor: pointer;
-    margin: 5px;
-
-    &:hover {
-      background: #d0e7ff;
-      border-color: #0056b3;
-    }
+  background: #2D2D2D;
+  color: #FFFFFF;
+  border: 1px solid #404040;
+  padding: 13px;
+  margin: 5px;
+  border-radius: 6px;
+  
+  &:hover {
+    background: #404040;
+  }
 `;
 
 const Seta = styled.div`
-  @media (max-width: 768px) {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    font-size: 24px; /* Aumenta o tamanho da seta */
-    width: 50px; /* Largura da área clicável */
-    height: 50px; /* Altura da área clicável */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.1); /* Fundo sutil para destacar */
-    border-radius: 50%; /* Formato circular */
-    cursor: pointer; /* Indica interatividade */
-    user-select: none; /* Impede seleção do texto da seta */
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #FFFFFF;
+  cursor: pointer;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
   }
 `;
 
 function Pesquisa() {
   const [flippedCards, setFlippedCards] = useState({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [confirmados, setConfirmados] = useState([]); // Estado para armazenar agendamentos confirmados
+
+  // Buscar agendamentos confirmados no banco
+  useEffect(() => {
+    const fetchConfirmados = async () => {
+      try {
+        const dataAtual = new Date().toISOString().split("T")[0];
+        const profissionaisNomes = profissionais.map((prof) => prof.nome); // Pega os nomes dos profissionais
+        let horariosConfirmados = {}; // Objeto para armazenar os horários confirmados por profissional
+  
+        for (const profissional of profissionaisNomes) {
+          const response = await fetch(
+            `https://expert-capilar-backend.onrender.com/agendamentos/disponibilidade?data_agendamento=${dataAtual}&profissional=${profissional}`
+          );
+          const data = await response.json();
+  
+          console.log(`Resposta da API para ${profissional}:`, data);
+  
+          if (data && Array.isArray(data.horariosDisponiveis)) {
+            horariosConfirmados[profissional] = data.horariosDisponiveis;
+          } else {
+            console.error(`Erro para ${profissional}: Dados inválidos`, data);
+            horariosConfirmados[profissional] = []; // Evita quebra
+          }
+        }
+  
+        setConfirmados(horariosConfirmados); // Atualiza o estado com os horários por profissional
+      } catch (error) {
+        console.error("Erro ao buscar horários disponíveis:", error);
+        setConfirmados({}); // Garante que seja um objeto vazio em caso de erro
+      }
+    };
+  
+    fetchConfirmados();
+  }, []);
+  
+
   const toggleCardFlip = (index) => {
     setFlippedCards((prevState) => ({
       ...prevState,
@@ -163,9 +197,78 @@ function Pesquisa() {
     }));
   };
 
+  const openModal = (profissional, horario) => {
+    const horarioFormatado = horario.split(" - ")[0];
+    const formattedDate = new Date().toISOString().split("T")[0]; // Data atual formatada
+
+    setModalData({
+      profissional: profissional.nome,
+      horario: horarioFormatado,
+      data: formattedDate,
+    });
+
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+  const handleConfirm = async (nome, telefone) => {
+    console.log("Tentando criar agendamento com:", {
+      cliente_nome: nome,
+      cliente_telefone: telefone,
+      data_agendamento: modalData.data,
+      hora_agendamento: modalData.horario,
+      profissional: modalData.profissional,
+    });
+
+    try {
+      const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cliente_nome: nome,
+          cliente_telefone: telefone,
+          data_agendamento: modalData.data,
+          hora_agendamento: modalData.horario,
+          profissional: modalData.profissional,
+        }),
+      });
+
+      if (response.ok) {
+        alert("Agendamento criado com sucesso!");
+      } else {
+        const errorText = await response.text();
+        alert(`Erro ao criar agendamento: ${errorText}`);
+      }
+    } catch (error) {
+      alert("Erro na comunicação com o servidor. Tente novamente mais tarde.");
+    }
+
+    closeModal();
+  };
+
+  // Verificar se um horário está confirmado
+  const isHorarioConfirmado = (horario, profissional) => {
+    if (!confirmados[profissional] || !Array.isArray(confirmados[profissional])) {
+      console.error(`Horários não carregados para ${profissional}:`, confirmados[profissional]);
+      return false; // Evita erros
+    }
+  
+    console.log(`Checando se ${horario} está disponível para ${profissional}:`, confirmados[profissional]);
+  
+    const horarioInicio = horario.split(' - ')[0];
+    return !confirmados[profissional].includes(horarioInicio); // Verifica se o horário está indisponível
+  };
+
   return (
     <div>
+      <TituloContainer>
         <Titulo>Conheça nossos profissionais</Titulo>
+      </TituloContainer>
       <ProfissionaisContainer>
         {profissionais.map((profissional, index) => (
           <CardWrapper key={index}>
@@ -185,10 +288,34 @@ function Pesquisa() {
                 </Seta>
               </CardFront>
               <CardBack>
-                <Nome>Horários Disponíveis</Nome>
-                {horarios.map((horario, i) => (
-                  <HorarioCard key={i}>{horario}</HorarioCard>
-                ))}
+                <Nome>Horários Disponíveis Hoje</Nome>
+                {horarios.map((horario, i) => {
+                  const horarioDesabilitado = isHorarioConfirmado(horario, profissional.nome); // Passa o nome do profissional
+
+                  console.log(`Horário ${horario} (${profissional.nome}): Desabilitado? ${horarioDesabilitado}`);
+
+                  return (
+                    <HorarioCard
+                      key={i}
+                      onClick={
+                        !horarioDesabilitado
+                          ? () => openModal(profissional, horario)
+                          : null
+                      }
+                      style={{
+                        cursor: horarioDesabilitado ? "not-allowed" : "pointer",
+                        opacity: horarioDesabilitado ? 0.5 : 1,
+                      }}
+                      title={
+                        horarioDesabilitado
+                          ? "Este horário já está confirmado."
+                          : "Clique para agendar"
+                      }
+                    >
+                      {horario}
+                    </HorarioCard>
+                  );
+                })}
                 <Seta
                   onClick={(e) => {
                     e.stopPropagation();
@@ -202,6 +329,14 @@ function Pesquisa() {
           </CardWrapper>
         ))}
       </ProfissionaisContainer>
+
+      {/* Modal de Agendamento */}
+      <ModalAgendamento
+        isOpen={modalOpen}
+        onClose={closeModal}
+        onConfirm={handleConfirm}
+        data={modalData}
+      />
     </div>
   );
 }

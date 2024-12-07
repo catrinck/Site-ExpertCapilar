@@ -2,22 +2,34 @@ import styled from 'styled-components';
 import Logo from '../Logo'
 
 const Section = styled.section`
+  background: #1B1B1B;
   width: 100%;
   padding: 50px 20px;
   text-align: center;
-  background: #fff;
   position: relative;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    padding: 30px 5px;
+    margin-top: 0;
+  }
 `;
 
 const Title = styled.h2`
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
-  color: #000;
+  color: #ffffff;
   margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    font-size: 32px;
+    margin-bottom: 15px;
+  }
 `;
 
 const BackgroundText = styled.div`
+  color: #000000;
+  opacity: 0.05;  
   font-size: 100px;
   color: rgba(0, 0, 0, 0.05);
   position: absolute;
@@ -37,6 +49,10 @@ const Content = styled.div`
   justify-content: center; /* Centraliza verticalmente */
   text-align: center;
 
+  @media (max-width: 768px) {
+    gap: 5px;
+    }
+
   img {
     max-width: 150px;
     margin-bottom: 20px;
@@ -45,7 +61,7 @@ const Content = styled.div`
   p {
     font-family: 'Poppins', sans-serif;
     font-size: 16px;
-    color: #333;
+    color: #e0e0e0;
     margin-bottom: 10px;
   }
 

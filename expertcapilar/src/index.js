@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Home from './rotas/Home';
+import QuemSomosPage from './rotas/quemsomos'; // Importe a página Quem Somos
 import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async'; 
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -14,33 +15,33 @@ const GlobalStyle = createGlobalStyle`
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    scroll-behavior: smooth; /* Rolagem suave */
+    scroll-behavior: smooth;
   }
   html {
-    scroll-behavior: smooth; /* Garante que todo o documento use rolagem suave */
+    scroll-behavior: smooth;
   }
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
       monospace;
-}
+  }
   li {
     list-style: none;
-}
-`
+  }
+`;
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
+    <HelmetProvider> {/* Envolvendo com HelmetProvider */}
     <GlobalStyle />
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/quem-somos" element={<QuemSomosPage />} /> {/* Rota para QuemSomosPage */}
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

@@ -4,29 +4,26 @@ import ModalCalendar from './modalCalendar';
 import ModalAgendamento from './modalAgendamento';
 import { horarios } from './horarios';
 import { profissionais } from '../Pesquisa/dadosProfissionais';
+import Button from './button';
 
 /* @media = modificações para a versao mobile*/
-
 
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
-<<<<<<< HEAD
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-=======
-  background: #fff;
+  background: #121212;
+  color: #ffffff;
 
   @media (max-width: 768px) {
-    align-items: stretch; /* Estende o conteúdo para o tamanho total */
+    padding: 20px;
+    min-height: auto; 
   }
->>>>>>> 7eedbcbe01e301bb8c8365dc116353c84f399a27
 `;
 
 
+
 const Titulo = styled.h2`
-  color: #000;
+  color: #ffffff;
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
   text-align: center;
@@ -47,7 +44,7 @@ const CalendarContainer = styled.div`
     font-size: 1rem;
     font-weight: normal;
     margin-top: 10px;
-    color: #333;
+    color: #ffffff;
   }
 
   button {
@@ -55,7 +52,7 @@ const CalendarContainer = styled.div`
     background: none;
     border: none;
     cursor: pointer;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 10px;
 
     &:hover {
@@ -75,12 +72,6 @@ const CalendarContainer = styled.div`
 
 const GradeHorarios = styled.div`
   display: grid;
-<<<<<<< HEAD
-  grid-template-columns: repeat(4, 1fr); /* Altera o número de colunas para se alinhar com os profissionais */
-  gap: 20px; /* Espaço entre as colunas */
-  width: 100%; /* Garante que ocupe toda a largura disponível */
-  justify-items: center; /* Centraliza os itens no grid */
-=======
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Alinha com os barbeiros */
   gap: 20px;
 
@@ -89,7 +80,6 @@ const GradeHorarios = styled.div`
     margin-top: 0px; /* Ajusta o espaço abaixo do calendário fixo */
     order: 2;
   }
->>>>>>> 7eedbcbe01e301bb8c8365dc116353c84f399a27
 `;
 
 
@@ -106,8 +96,9 @@ const ColunaHorarios = styled.div`
 
 const Horario = styled.div`
   padding: 15px;
-  background: #fff; /* Fundo claro */
-  border: 1px solid #ddd;
+  background: #2c2c2c;
+  border: 1px solid #404040;
+  color: #ffffff;
   border-radius: 8px;
   text-align: center;
   font-family: 'Poppins', sans-serif;
@@ -115,7 +106,7 @@ const Horario = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    background: #e0f7fa; /* Fundo diferente ao passar o mouse */
+    background: #3d3d3d;
     cursor: pointer;
   
   @media (max-width: 768px) {
@@ -159,7 +150,7 @@ function Agendamentos({data}) {
     });
 
     try {
-        const response = await fetch("http://localhost:8000/agendamentos", {
+        const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -195,7 +186,7 @@ function Agendamentos({data}) {
       <Titulo>Horários Disponíveis</Titulo>
       <CalendarContainer>
         <button onClick={() => setCalendarOpen(true)}>
-          <span role="img" aria-label="calendar">📅</span>
+          <span role="img" aria-label="calendar"><Button /></span>
         </button>
         <h2>Data Selecionada: {selectedDate.toLocaleDateString()}</h2>
       </CalendarContainer>

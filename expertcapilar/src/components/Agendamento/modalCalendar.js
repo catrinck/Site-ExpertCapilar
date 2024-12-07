@@ -60,9 +60,6 @@ const ModalCalendar = ({ isOpen, onClose, selectedDate, setSelectedDate }) => {
           onChange={(date) => setSelectedDate(date)}
           inline
           minDate={new Date()} // Não permite selecionar datas passadas
-          showMonthDropdown
-          showYearDropdown
-          dropdownMode="select"
           dayClassName={(date) => {
             // Adiciona uma classe CSS para dias fora do mês atual
             const isOutsideMonth = date.getMonth() !== selectedDate.getMonth();
