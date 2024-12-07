@@ -1,4 +1,3 @@
-// src/components/Biography/index.js
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { biographyData } from './data';
@@ -13,7 +12,8 @@ const Container = styled.div`
   gap: 20px;
 
   @media (max-width: 768px) {
-    padding: 20px 20px 0;
+    padding: 20px 0px;
+    gap: 15px;
   }
 `;
 
@@ -27,13 +27,19 @@ const SlideContainer = styled.div`
   
   @media (max-width: 768px) {
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
+    padding: 0 10px;
   }
 `;
 
 const ImageContainer = styled.div`
   flex: 1;
   max-width: 400px;
+
+  @media (max-width: 768px) {
+    max-width: 280px;
+    width: 100%;
+  }
 `;
 
 const Image = styled.img`
@@ -41,24 +47,44 @@ const Image = styled.img`
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 6px #00000033;
+  transition: transform 0.3s ease;
+
+  @media (max-width: 768px) {
+    border-radius: 8px;
+  }
 `;
 
 const TextContainer = styled.div`
   flex: 1;
   color: #FFFFFF;
   text-align: left;
+
+  @media (max-width: 768px) {
+    text-align: center;
+    padding: 0 10px;
+  }
 `;
 
 const Title = styled.h2`
   font-size: 32px;
   margin-bottom: 20px;
   font-family: 'Poppins', sans-serif;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
 `;
 
 const Text = styled.p`
   font-size: 18px;
   line-height: 1.6;
   color: #E0E0E0;
+
+  @media (max-width: 768px) {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 `;
 
 const NavigationButton = styled.button`
@@ -73,10 +99,21 @@ const NavigationButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
 
   &:hover {
     background: #E52E26;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
 `;
 
@@ -84,6 +121,11 @@ const NavigationContainer = styled.div`
   display: flex;
   gap: 20px;
   margin-top: 20px;
+
+  @media (max-width: 768px) {
+    gap: 15px;
+    margin-top: 15px;
+  }
 `;
 
 function Biography() {
@@ -105,7 +147,11 @@ function Biography() {
     <Container id="biography">
       <SlideContainer>
         <ImageContainer>
-          <Image src={biographyData[currentIndex].image} alt={biographyData[currentIndex].title} />
+          <Image 
+            src={biographyData[currentIndex].image} 
+            alt={biographyData[currentIndex].title}
+            loading="lazy"
+          />
         </ImageContainer>
         <TextContainer>
           <Title>{biographyData[currentIndex].title}</Title>
@@ -113,8 +159,8 @@ function Biography() {
         </TextContainer>
       </SlideContainer>
       <NavigationContainer>
-        <NavigationButton onClick={handlePrev}>←</NavigationButton>
-        <NavigationButton onClick={handleNext}>→</NavigationButton>
+        <NavigationButton onClick={handlePrev} aria-label="Previous">←</NavigationButton>
+        <NavigationButton onClick={handleNext} aria-label="Next">→</NavigationButton>
       </NavigationContainer>
     </Container>
   );

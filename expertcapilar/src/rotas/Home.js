@@ -12,50 +12,23 @@ const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: #121212;
-  gap: 0; 
-
-    #profissionais {
-      order: 1;
-      margin-bottom: 0;
-    }
-    #biography {
-      order: 2; 
-      margin-top: 0px; 
-    }
-    #agendamentos {
-      margin-top: 0;
-      order: 3;
-    }
-    #quem-somos {
-      order: 4;
-      margin-top: 0;
-    }
-
-  @media (max-width: 768px) {
-    #agendamentos {
-      order: 1;
-      margin-bottom: 0;
-    }
-    #profissionais {
-      margin-top: 0;
-      order: 2;
-    }
-    #biography {
-      order: 3; 
-      margin-top: 0px; 
-    }
-    #quem-somos {
-      order: 4;
-      margin-top: 50px;
-    }
+  gap: 0;
+ 
+  #agendamentos {
+    order: 1;
   }
-`;
-
-const CarouselSection = styled.div`
-  background: #121212;
-  width: 100%;
-  padding: 20px 0;
-  order: 5;
+  #profissionais {
+    order: 2;
+  }
+  #biography {
+    order: 3;
+  }
+  #carousel {
+    order: 4;
+  }
+  #quem-somos {
+    order: 5;
+  }
 `;
 
 function Home() {
@@ -79,10 +52,10 @@ function Home() {
         <div id="quem-somos">
           <QuemSomos />
         </div>
+        <div id="carousel">
+          <ImageCarousel />
+        </div>
       </HomeContainer>
-      <CarouselSection>
-        <ImageCarousel />
-      </CarouselSection>
     </div>
   );
 }
