@@ -76,8 +76,11 @@ const CardBack = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Ajusta para alinhar os itens ao topo */
   text-align: center;
+  padding: 20px;
+  overflow-y: auto; /* Adiciona scroll interno */
+  max-height: 100%; /* Restringe o tamanho do card */
+  box-sizing: border-box; /* Garante que padding não afete o tamanho */
 
   @media (max-width: 768px) {
     display: flex;
@@ -148,6 +151,14 @@ const Seta = styled.div`
   &:hover {
     background: rgba(255, 255, 255, 0.2);
   }
+`;
+
+const HorariosContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr; /* Define duas colunas fixas */
+  gap: 10px; /* Espaçamento entre os horários */
+  width: 100%; /* Garante que ocupa a largura disponível */
+  margin-top: 20px; /* Espaçamento abaixo do título */
 `;
 
 function Pesquisa() {
@@ -263,8 +274,7 @@ function Pesquisa() {
   
     console.log(`Checando se ${horario} está disponível para ${profissional}:`, confirmados[profissional]);
   
-    const horarioInicio = horario.split(' - ')[0];
-    return !confirmados[profissional].includes(horarioInicio); // Verifica se o horário está indisponível
+    return !confirmados[profissional].includes(horario); // Verifica o horário completo
   };
 
   return (
@@ -292,33 +302,33 @@ function Pesquisa() {
               </CardFront>
               <CardBack>
                 <Nome>Horários Disponíveis Hoje</Nome>
-                {horarios.map((horario, i) => {
-                  const horarioDesabilitado = isHorarioConfirmado(horario, profissional.nome); // Passa o nome do profissional
+                <HorariosContainer>
+                  {horarios.map((horario, i) => {
+                    const horarioDesabilitado = isHorarioConfirmado(horario, profissional.nome);
 
-                  console.log(`Horário ${horario} (${profissional.nome}): Desabilitado? ${horarioDesabilitado}`);
-
-                  return (
-                    <HorarioCard
-                      key={i}
-                      onClick={
-                        !horarioDesabilitado
-                          ? () => openModal(profissional, horario)
-                          : null
-                      }
-                      style={{
-                        cursor: horarioDesabilitado ? "not-allowed" : "pointer",
-                        opacity: horarioDesabilitado ? 0.5 : 1,
-                      }}
-                      title={
-                        horarioDesabilitado
-                          ? "Este horário já está confirmado."
-                          : "Clique para agendar"
-                      }
-                    >
-                      {horario}
-                    </HorarioCard>
-                  );
-                })}
+                    return (
+                      <HorarioCard
+                        key={i}
+                        onClick={
+                          !horarioDesabilitado
+                            ? () => openModal(profissional, horario)
+                            : null
+                        }
+                        style={{
+                          cursor: horarioDesabilitado ? "not-allowed" : "pointer",
+                          opacity: horarioDesabilitado ? 0.5 : 1,
+                        }}
+                        title={
+                          horarioDesabilitado
+                            ? "Este horário já está confirmado."
+                            : "Clique para agendar"
+                        }
+                      >
+                        {horario}
+                      </HorarioCard>
+                    );
+                  })}
+                </HorariosContainer>
                 <Seta
                   onClick={(e) => {
                     e.stopPropagation();

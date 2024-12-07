@@ -1,28 +1,33 @@
 import exemplo from '../../assets/perfil-exemplo.jpg'
+import DG from '../../assets/DG/DG.JPG'
+import yohann from '../../assets/DoCarmo/yohann.jpg'
+import Henry from '../../assets/Henry/Henry.JPG'
+import Silvio from '../../assets/Silvio/silvio.jpg'
+
 
 export const profissionais = [
        {
-         foto: exemplo,
+         foto: Silvio,
          nome: 'Silvio',
          info1: 'Especialidade: Cabelos Curly',
-         info2: 'Experiência: 5 anos',
+         info2: 'Experiência: 10 anos',
        },
        {
-         foto: exemplo,
+         foto: DG,
          nome: 'DG',
          info1: 'Especialidade: Barba',
          info2: 'Experiência: 3 anos',
        },
        {
-         foto: exemplo,
-         nome: 'Profissional 3',
+         foto: yohann,
+         nome: 'Yohann do Carmo',
          info1: 'Especialidade: Cortes Modernos',
          info2: 'Experiência: 4 anos',
        },
        {
-         foto: exemplo,
-         nome: 'Profissional 4',
-         info1: 'Especialidade: Químicas',
+         foto: Henry,
+         nome: 'Henry André',
+         info1: 'Especialidade: Degradê',
          info2: 'Experiência: 6 anos',
        },
      ];
