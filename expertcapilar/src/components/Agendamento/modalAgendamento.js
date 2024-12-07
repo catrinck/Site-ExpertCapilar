@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import InputMask from "react-input-mask"; 
 import { useState } from "react";
+import Notification from '../Notification/index';
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -113,6 +114,7 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
   const [nome, setNome] = React.useState('');
   const [telefone, setTelefone] = React.useState('');
   const [shouldRender, setShouldRender] = React.useState(isOpen);
+  const [notification, setNotification] = React.useState(null); // Estado para a notificação
 
   // Reseta os campos quando o modal for aberto
   React.useEffect(() => {
@@ -122,51 +124,59 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
       setShouldRender(true);
     } else {
       const timer = setTimeout(() => setShouldRender(false), 400); // Espera a animação acabar
-      return () => clearTimeout(timer); // Limpa o timeout ao desmontar
+      return () => clearTimeout(timer);
     }
   }, [isOpen]);
 
-  // Função para validar o telefone antes de confirmar
   const handleConfirm = () => {
-    const telefoneSemMascara = telefone.replace(/\D/g, ''); // Remove tudo que não é número
+    const telefoneSemMascara = telefone.replace(/\D/g, '');
     if (telefoneSemMascara.length !== 11) {
-      alert('Por favor, preencha o número completo no formato (DD) 12345-6789.');
+      setNotification('Por favor, preencha o número completo no formato (XX) XXXXX-XXXX.');
       return;
     }
 
     if (!nome.trim()) {
-      alert('Por favor, preencha o nome.');
+      setNotification('Por favor, preencha o nome.');
       return;
     }
 
-    onConfirm(nome, telefone); // Confirma os dados se tudo estiver certo
+    onConfirm(nome, telefone); // Confirma os dados
+    setNotification('Agendamento criado com sucesso!'); // Exibe mensagem de sucesso
   };
 
-  if (!shouldRender) return null;
-
   return (
-    <ModalContainer isOpen={isOpen} onClick={onClose}>
-      <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <h2>Agendar com {data?.profissional}</h2>
-        <p>Data: {data?.data}</p>
-        <p>Horário: {data?.horario}</p>
-        <Input
-          type="text"
-          placeholder="Seu nome"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+    <>
+      {notification && (
+        <Notification
+          message={notification}
+          onClose={() => setNotification(null)}
         />
-        <MaskedInput
-          mask="(99) 99999-9999"
-          placeholder="Seu telefone"
-          value={telefone}
-          onChange={(e) => setTelefone(e.target.value)}
-        />
-        <Button onClick={handleConfirm}>Confirmar</Button>
-      </ModalContent>
-    </ModalContainer>
+      )}
+      {shouldRender && (
+        <ModalContainer isOpen={isOpen} onClick={onClose}>
+          <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+            <CloseButton onClick={onClose}>&times;</CloseButton>
+            <h2>Agendar com {data?.profissional}</h2>
+            <p>Data: {data?.data}</p>
+            <p>Horário: {data?.horario}</p>
+            <Input
+              type="text"
+              placeholder="Seu nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+            <MaskedInput
+              mask="(99) 99999-9999"
+              placeholder="Seu telefone"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+            />
+            <Button onClick={handleConfirm}>Confirmar</Button>
+          </ModalContent>
+        </ModalContainer>
+      )}
+    </>
   );
 }
-      
-      export default ModalAgendamento;
+
+export default ModalAgendamento;
