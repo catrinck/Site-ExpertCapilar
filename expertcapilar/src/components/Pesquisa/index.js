@@ -333,6 +333,7 @@ function Pesquisa() {
         ))}
       </ProfissionaisContainer>
 
+      {/* Modal de Agendamento */}
       <ModalAgendamento
         isOpen={modalOpen}
         onClose={closeModal}

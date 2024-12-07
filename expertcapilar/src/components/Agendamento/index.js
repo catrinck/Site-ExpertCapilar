@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import ModalCalendar from './modalCalendar';
 
 const Section = styled.section`
-  padding: 40px 20px;
   background: #121212;
   color: #ffffff;
   display: flex;
@@ -86,6 +85,10 @@ function Agendamentos({data}) {
         </svg>
         <span className="label">Agendar</span>
       </ScheduleButton>
+        <button onClick={() => setCalendarOpen(true)}>
+          <span role="img" aria-label="calendar"><Button /></span>
+        </button>
+      </CalendarContainer>
       <ModalCalendar
         isOpen={calendarOpen}
         onClose={() => setCalendarOpen(false)}
