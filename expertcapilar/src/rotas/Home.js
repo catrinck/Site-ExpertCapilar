@@ -5,12 +5,31 @@ import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
 import QuemSomos from '../components/QuemSomos';
 import { Helmet } from 'react-helmet-async';
-import ImageCarousel from '../components/images/index.js';
+import ImageCarousel from '../components/ImagesCarousel/index.js';
+import Biography from '../components/Biography';
 
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
   background: #121212;
+  gap: 0; 
+
+    #profissionais {
+      order: 1;
+      margin-bottom: 0;
+    }
+    #biography {
+      order: 2; 
+      margin-top: 0px; 
+    }
+    #agendamentos {
+      margin-top: 0;
+      order: 3;
+    }
+    #quem-somos {
+      order: 4;
+      margin-top: 0;
+    }
 
   @media (max-width: 768px) {
     #agendamentos {
@@ -21,9 +40,13 @@ const HomeContainer = styled.div`
       margin-top: 0;
       order: 2;
     }
+    #biography {
+      order: 3; 
+      margin-top: 0px; 
+    }
     #quem-somos {
-      order: 3;
-      margin-top: 0;
+      order: 4;
+      margin-top: 50px;
     }
   }
 `;
@@ -32,6 +55,7 @@ const CarouselSection = styled.div`
   background: #121212;
   width: 100%;
   padding: 20px 0;
+  order: 5;
 `;
 
 function Home() {
@@ -49,13 +73,16 @@ function Home() {
         <div id="agendamentos">
           <Agendamentos />
         </div>
+        <div id="biography">
+          <Biography />
+        </div>
         <div id="quem-somos">
           <QuemSomos />
         </div>
-        <CarouselSection>
-          <ImageCarousel />
-        </CarouselSection>
       </HomeContainer>
+      <CarouselSection>
+        <ImageCarousel />
+      </CarouselSection>
     </div>
   );
 }
