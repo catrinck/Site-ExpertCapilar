@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Logo from '../Logo'
+import AboutLogo from '../Logo/quemsomosLogo';
 
 const Section = styled.section`
-  background: #1B1B1B;
+  background: #121212;
   width: 100%;
   padding: 50px 20px;
   text-align: center;
@@ -19,11 +19,11 @@ const Title = styled.h2`
   font-family: 'Poppins', sans-serif;
   font-size: 36px;
   color: #ffffff;
-  margin-bottom: 30px;
+  margin: 20px 0 30px;
 
   @media (max-width: 768px) {
     font-size: 32px;
-    margin-bottom: 15px;
+    margin: 15px 0 20px;
   }
 `;
 
@@ -45,17 +45,12 @@ const Content = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Alinha todos os itens ao centro horizontalmente */
-  justify-content: center; /* Centraliza verticalmente */
+  align-items: center;
+  justify-content: center;
   text-align: center;
 
   @media (max-width: 768px) {
     gap: 5px;
-    }
-
-  img {
-    max-width: 150px;
-    margin-bottom: 20px;
   }
 
   p {
@@ -86,15 +81,14 @@ function QuemSomos() {
     <Section>
       <BackgroundText>Expert Capilar</BackgroundText>
       <Content>
-          <Logo />  
-          <Title>Quem Somos</Title>
-          <p>Av. Ramos Ferreira, 1416, </p>
-          <p>Centro, Manaus, AM</p>
-          <p>Contato: (92) 99999-9999</p>
+        <AboutLogo />
+        <Title>Quem Somos</Title>
+        <p>Av. Ramos Ferreira, 1416, </p>
+        <p>Centro, Manaus, AM</p>
+        <p>Contato: (92) 99999-9999</p>
       </Content>
     </Section>
   );
 }
 
 export default QuemSomos;
-
