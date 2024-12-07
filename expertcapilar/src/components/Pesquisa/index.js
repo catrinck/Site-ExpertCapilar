@@ -1,6 +1,7 @@
 import ModalAgendamento from '../Agendamento/modalAgendamento';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import Notification from '../Notification/index'; 
 import { profissionais } from './dadosProfissionais';
 import { horarios } from '../Agendamento/horarios';
 export { Pesquisa };
@@ -154,6 +155,8 @@ function Pesquisa() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [confirmados, setConfirmados] = useState([]); // Estado para armazenar agendamentos confirmados
+  const [notification, setNotification] = useState(null);
+
 
   // Buscar agendamentos confirmados no banco
   useEffect(() => {
@@ -239,13 +242,13 @@ function Pesquisa() {
       });
 
       if (response.ok) {
-        alert("Agendamento criado com sucesso!");
+        setNotification("Agendamento criado com sucesso!"); // Substitui o alert
       } else {
         const errorText = await response.text();
-        alert(`Erro ao criar agendamento: ${errorText}`);
+        setNotification(`Erro ao criar agendamento: ${errorText}`);
       }
     } catch (error) {
-      alert("Erro na comunicação com o servidor. Tente novamente mais tarde.");
+      setNotification("Erro na comunicação com o servidor. Tente novamente mais tarde.");
     }
 
     closeModal();
