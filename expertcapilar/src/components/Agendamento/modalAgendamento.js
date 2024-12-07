@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import InputMask from "react-input-mask"; 
+import { useState } from "react";
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -49,6 +51,24 @@ const Input = styled.input`
   }
 `;
 
+const MaskedInput = styled(InputMask)`
+  background: #2d2d2d;
+  color: #ffffff;
+  border: 1px solid #404040;
+  margin: 10px 0;
+  padding: 10px;
+  width: 90%;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 5px #0066cc;
+  }
+`;
+
 const Button = styled.button`
   margin-top: 20px;
   padding: 12px 24px;
@@ -88,28 +108,28 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
         if (!shouldRender) return null;
    
    
-     return (
-       <ModalContainer isOpen={isOpen} onClick={onClose}>
-         <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
-           <h2>Agendar com {data?.profissional}</h2>
-           <p>Data: {data?.data}</p>
-           <p>Horário: {data?.horario}</p>
-           <Input
-             type="text"
-             placeholder="Seu nome"
-             value={nome}
-             onChange={(e) => setNome(e.target.value)}
-           />
-           <Input
-             type="text"
-             placeholder="Seu telefone"
-             value={telefone}
-             onChange={(e) => setTelefone(e.target.value)}
-           />
-           <Button onClick={() => onConfirm(nome, telefone)}>Confirmar</Button>
-         </ModalContent>
-       </ModalContainer>
-     );
-   }
-
-export default ModalAgendamento;
+        return (
+          <ModalContainer isOpen={isOpen} onClick={onClose}>
+            <ModalContent isOpen={isOpen} onClick={(e) => e.stopPropagation()}>
+              <h2>Agendar com {data?.profissional}</h2>
+              <p>Data: {data?.data}</p>
+              <p>Horário: {data?.horario}</p>
+              <Input
+                type="text"
+                placeholder="Seu nome"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+              />
+              <MaskedInput
+                mask="(99) 99999-9999"
+                placeholder="Seu telefone"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+              />
+              <Button onClick={() => onConfirm(nome, telefone)}>Confirmar</Button>
+            </ModalContent>
+          </ModalContainer>
+        );
+      }
+      
+      export default ModalAgendamento;
