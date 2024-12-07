@@ -6,8 +6,6 @@ import { horarios } from './horarios';
 import { profissionais } from '../Pesquisa/dadosProfissionais';
 import Button from './button';
 
-/* @media = modificações para a versao mobile*/
-
 const Section = styled.section`
   padding: 50px 20px;
   min-height: 100vh;
@@ -18,20 +16,6 @@ const Section = styled.section`
     padding: 20px;
     min-height: auto; 
   }
-`;
-
-
-
-const Titulo = styled.h2`
-  color: #ffffff;
-  font-family: 'Poppins', sans-serif;
-  font-size: 36px;
-  text-align: center;
-  margin-bottom: 30px;
-
-  @media (max-width: 768px) {
-    display: none;
-    }
 `;
 
 const CalendarContainer = styled.div`
@@ -59,63 +43,17 @@ const CalendarContainer = styled.div`
       color: #007bff;
     }
   }
-      h2 {
-      margin-top: 5px;
-    }
-  @media (max-width: 768px) {
-    margin-bottom: 0px; /* Remove espaço extra entre calendário e cards */
-    width: 100%; /* Garante largura total no mobile */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil para destacar */
+
+  h2 {
+    margin-top: 5px;
   }
-`;
-
-
-const GradeHorarios = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Alinha com os barbeiros */
-  gap: 20px;
 
   @media (max-width: 768px) {
-
-    margin-top: 0px; /* Ajusta o espaço abaixo do calendário fixo */
-    order: 2;
+    margin-bottom: 0px;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 `;
-
-
-/* ColunaHorarios tambem exibe o nome do profissional */
-const ColunaHorarios = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  
-  @media (max-width: 768px){
-    display: none;
-    }
-`;
-
-const Horario = styled.div`
-  padding: 15px;
-  background: #2c2c2c;
-  border: 1px solid #404040;
-  color: #ffffff;
-  border-radius: 8px;
-  text-align: center;
-  font-family: 'Poppins', sans-serif;
-  font-size: 16px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    background: #3d3d3d;
-    cursor: pointer;
-  
-  @media (max-width: 768px) {
-    font-size: 14px; /* Ajusta o texto para telas menores */
-    padding: 10px; /* Reduz o espaçamento */
-  }
-`;
-
-
 
 function Agendamentos({data}) {
   const [modalOpen, setModalOpen] = useState(false);
@@ -123,88 +61,55 @@ function Agendamentos({data}) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [modalData, setModalData] = useState(null);
 
-
-  // Função para abrir o modal de agendamento
   const handleHorarioClick = (horario, profissional) => {
     const horarioInicio = horario.split(' - ')[0];
     const formattedDate = selectedDate.toISOString().split('T')[0];
     const data = {
-        profissional,
-        horario: horarioInicio,
-        data: formattedDate,
+      profissional,
+      horario: horarioInicio,
+      data: formattedDate,
     };
 
-    console.log("Dados enviados para o modal:", data); // Verificar valores
     setModalData(data);
     setModalOpen(true);
-};
+  };
 
-  // Função para confirmar o agendamento
   const handleConfirm = async (nome, telefone) => {
-    console.log("Tentando criar agendamento com:", {
-        nome,
-        telefone,
-        data_agendamento: modalData.data,
-        hora_agendamento: modalData.horario,
-        profissional: modalData.profissional,
-    });
-
     try {
-        const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                cliente_nome: nome,
-                cliente_telefone: telefone,
-                data_agendamento: modalData.data,
-                hora_agendamento: modalData.horario,
-                profissional: modalData.profissional,
-            }),
-        });
+      const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cliente_nome: nome,
+          cliente_telefone: telefone,
+          data_agendamento: modalData.data,
+          hora_agendamento: modalData.horario,
+          profissional: modalData.profissional,
+        }),
+      });
 
-        console.log("Resposta do servidor:", response);
-
-        if (response.ok) {
-            const responseData = await response.json(); // Parseia a resposta se necessário
-            console.log("Dados retornados:", responseData);
-            alert("Agendamento criado com sucesso!");
-        } else {
-            const errorText = await response.text(); // Captura mensagem de erro do servidor
-            console.error("Erro no servidor:", errorText);
-            alert("Erro ao criar agendamento. Tente novamente.");
-        }
+      if (response.ok) {
+        const responseData = await response.json();
+        alert("Agendamento criado com sucesso!");
+      } else {
+        const errorText = await response.text();
+        alert("Erro ao criar agendamento. Tente novamente.");
+      }
     } catch (error) {
-        console.error("Erro na requisição:", error);
-        alert("Erro na comunicação com o servidor.");
+      alert("Erro na comunicação com o servidor.");
     }
-};
+  };
 
   return (
     <Section id="agendamentos">
-      <Titulo>Horários Disponíveis</Titulo>
       <CalendarContainer>
         <button onClick={() => setCalendarOpen(true)}>
           <span role="img" aria-label="calendar"><Button /></span>
         </button>
         <h2>Data Selecionada: {selectedDate.toLocaleDateString()}</h2>
       </CalendarContainer>
-      <GradeHorarios>
-        {profissionais.map((profissional, index) => (
-          <ColunaHorarios key={index}>
-            <h3>{profissional.nome}</h3>
-            {horarios.map((horario, index) => (
-              <Horario
-                key={index}
-                onClick={() => handleHorarioClick(horario, profissional.nome)}
-              >
-                {horario}
-              </Horario>
-            ))}
-          </ColunaHorarios>
-        ))}
-      </GradeHorarios>
       <ModalCalendar
         isOpen={calendarOpen}
         onClose={() => setCalendarOpen(false)}
