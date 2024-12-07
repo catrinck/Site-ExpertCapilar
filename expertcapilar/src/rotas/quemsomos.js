@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import ImageCarousel from '../components/images/index.js';
+import ImageCarousel from '../components/ImagesCarousel/index.js';
 
 const QuemSomosContainer = styled.div`
   background: #121212;
