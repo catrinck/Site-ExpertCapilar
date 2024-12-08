@@ -1,4 +1,3 @@
-import exemplo from '../../assets/perfil-exemplo.jpg'
 import DG from '../../assets/DG/DG.JPG'
 import yohann from '../../assets/DoCarmo/yohann.jpg'
 import Henry from '../../assets/Henry/Henry.JPG'

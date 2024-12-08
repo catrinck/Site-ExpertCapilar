@@ -1,3 +1,9 @@
+import DG from '../../assets/DG/DG.JPG'
+import yohann from '../../assets/DoCarmo/yohann.jpg'
+import Henry from '../../assets/Henry/Henry.JPG'
+import Silvio from '../../assets/Silvio/silvio2.jpg'
+import Silvio2 from '../../assets/Silvio/silvio.jpg'
+
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   CarouselContainer,
@@ -8,6 +14,7 @@ import {
   RightArrow
 } from './styles';
 
+
 const TOUCH_THRESHOLD = 50;
 
 function ImageCarousel() {
@@ -16,11 +23,10 @@ function ImageCarousel() {
   const [slidesPerView, setSlidesPerView] = useState(3);
   
   const images = [
-    'https://via.placeholder.com/300x200.png?text=Foto+1',
-    'https://via.placeholder.com/300x200.png?text=Foto+2',
-    'https://via.placeholder.com/300x200.png?text=Foto+3',
-    'https://via.placeholder.com/300x200.png?text=Foto+4',
-    'https://via.placeholder.com/300x200.png?text=Foto+1',
+    Silvio,
+    DG,
+    yohann,
+    Henry,
     'https://via.placeholder.com/300x200.png?text=Foto+2',
     'https://via.placeholder.com/300x200.png?text=Foto+1',
     'https://via.placeholder.com/300x200.png?text=Foto+2',

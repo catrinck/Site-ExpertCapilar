@@ -1,4 +1,3 @@
-import Logo from '../Logo/quemsomosLogo';
 import HeaderLogo from '../Logo/headerLogo';
 import OpcoesHeader from '../OpcoesHeader';
 import IconesHeader from '../IconesHeader';
