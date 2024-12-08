@@ -39,31 +39,40 @@ const LinkStyled = styled.a`
 `;
 
 const textoOpcoes = [
-  { texto: 'NOSSOS PROFISSIONAIS', href: '#profissionais', externo: true },
-  { texto: 'AGENDAMENTOS DISPONÍVEIS', href: '#agendamentos', externo: true },
-  { texto: 'QUEM SOMOS', href: '/quem-somos', externo: false } // Para uma nova página
+  { texto: 'NOSSOS PROFISSIONAIS', href: 'profissionais', externo: false },
+  { texto: 'AGENDAMENTOS DISPONÍVEIS', href: 'agendamentos', externo: false },
+  { texto: 'QUEM SOMOS', href: 'quem-somos', externo: false } // Rolagem para a seção "quem-somos"
 ];
-   
+ 
 function OpcoesHeader() {
   return (
     <Opcoes>
-      {textoOpcoes.map(({ texto, href, externo }, index) => (
-        externo ? (
-          // Links internos (rolagem na página)
-          <LinkStyled as="a" href={href} key={index}>
-            <Opcao>
-              <p>{texto}</p>
-            </Opcao>
-          </LinkStyled>
-        ) : (
-          // Links externos (outras páginas)
-          <LinkStyled as={Link} to={href} key={index}>
-            <Opcao>
-              <p>{texto}</p>
-            </Opcao>
-          </LinkStyled>
-        )
-      ))}
+      {textoOpcoes.map(({ texto, href, externo }, index) =>
+  !externo ? ( // Links internos (rolagem na página)
+    <LinkStyled
+      as="a"
+      href={`#${href}`} // Adiciona "#" para referenciar IDs na página
+      key={index}
+    >
+      <Opcao>
+        <p>{texto}</p>
+      </Opcao>
+    </LinkStyled>
+  ) : ( // Links externos (abrem uma nova página)
+    <LinkStyled
+      as="a"
+      href={href}
+      key={index}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Opcao>
+        <p>{texto}</p>
+      </Opcao>
+    </LinkStyled>
+  )
+)}
+
     </Opcoes>
   );
 }

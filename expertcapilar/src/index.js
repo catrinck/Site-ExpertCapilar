@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Home from './rotas/Home';
-import QuemSomosPage from './rotas/quemsomos'; // Importe a página Quem Somos
 import reportWebVitals from './reportWebVitals';
 import { createGlobalStyle } from 'styled-components';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async'; 
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -37,7 +37,6 @@ root.render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/quem-somos" element={<QuemSomosPage />} /> {/* Rota para QuemSomosPage */}
       </Routes>
     </BrowserRouter>
     </HelmetProvider>

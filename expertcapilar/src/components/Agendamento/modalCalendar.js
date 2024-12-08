@@ -25,19 +25,45 @@ const ModalContent = styled.div`
   width: 90%;
   text-align: center;
 `;
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+`;
+
+const Button = styled.button`
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+  &:active {
+    background-color: #004494;
+    transform: scale(0.95);
+  }
+`;
 
 const CloseButton = styled.button`
   background: #ff6b6b;
   color: #fff;
   border: none;
-  border-radius: 5px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 12px 24px;
   font-size: 1rem;
   cursor: pointer;
-  margin-top: 10px;
-  width: 100%;
   text-align: center;
 `;
+
 
 const StyledDatePicker = styled(DatePicker)`
   width: 100%;
@@ -47,6 +73,7 @@ const StyledDatePicker = styled(DatePicker)`
   border-radius: 5px;
   text-align: center;
 `;
+
 
 const ModalCalendar = ({ isOpen, onClose, selectedDate, setSelectedDate }) => {
   if (!isOpen) return null;
@@ -66,7 +93,10 @@ const ModalCalendar = ({ isOpen, onClose, selectedDate, setSelectedDate }) => {
             return isOutsideMonth ? 'outside-month' : '';
           }}
         />
-        <CloseButton onClick={onClose}>Fechar</CloseButton>
+        <ButtonContainer>
+          <Button onClick={selectedDate}>Confirmar</Button>
+          <CloseButton onClick={onClose}>Fechar</CloseButton>
+        </ButtonContainer>
       </ModalContent>
     </ModalOverlay>
   );
