@@ -85,7 +85,7 @@ function QuemSomos() {
         <Title>Quem Somos</Title>
         <p>Av. Ramos Ferreira, 1416 </p>
         <p>Centro, Manaus, AM</p>
-        <p>Contato: (92)98846-4951</p>
+        <p>Contato: (92)98615-3537</p>
         <p>Na Expert Capilar, somos mais que uma barbearia: somos uma família unida pela paixão de cuidar do 
           seu estilo.</p>
         <p>Trabalhamos com parcerias exclusivas para garantir o melhor serviço e fortalecer nossos laços com

@@ -34,7 +34,7 @@ function IconesHeader() {
       <IconeContainer>
         <IconeTexto>Entre em contato</IconeTexto>
         <a
-                    href="https://wa.me/92988464951?text=Olá, gostaria de mais informações!"
+                    href="https://wa.me/92986153537?text=Olá, gostaria de saber mais informações!"
                     target="_blank"
                     rel="noopener noreferrer"
                 >
