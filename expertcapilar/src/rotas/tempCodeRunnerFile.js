@@ -1,59 +1,54 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import { Pesquisa } from '../components/Pesquisa';
 import Agendamentos from '../components/Agendamento';
 import QuemSomos from '../components/QuemSomos';
 import { Helmet } from 'react-helmet-async';
-import ImageCarousel from '../components/ImagesCarousel/index.js';
-import Biography from '../components/Biography';
+import ImageCarousel from 'C:\\Users\\catri\\ExpertCapilar\\expertcapilar\\src\\assets\\ImagesCarousel.js'; // Importe o carrossel
 
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  background: #121212;
-  gap: 0;
- 
-  #agendamentos {
-    order: 1;
-  }
-  #profissionais {
-    order: 2;
-  }
-  #biography {
-    order: 3;
-  }
-  #carousel {
-    order: 4;
-  }
-  #quem-somos {
-    order: 5;
+
+  @media (max-width: 768px) {
+    #agendamentos {
+      order: 1; /* Define a seção Agendamentos para aparecer primeiro */
+    }
+    #profissionais {
+      margin-top: 20px;
+      order: 2; /* Define a seção Profissionais para aparecer depois */
+    }
+    #quem-somos {
+      order: 3; /* Define a seção Quem Somos para aparecer por último */
+    }
   }
 `;
 
 function Home() {
   return (
-    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden', background: '#121212' }}>
+    <div style={{ width: '100%', maxWidth: '100vw', overflowX: 'hidden' }}>
       <Helmet>
         <title>ExpertCapilar</title>
         <meta name="description" content="Bem-vindo ao nosso site!" />
       </Helmet>
       <Header />
       <HomeContainer>
+        {/* Seção Nossos Profissionais */}
         <div id="profissionais">
           <Pesquisa />
         </div>
+        {/* Seção Agendamentos Disponíveis */}
         <div id="agendamentos">
           <Agendamentos />
         </div>
-        <div id="biography">
-          <Biography />
-        </div>
+        {/* Botão "Quem Somos" */}
         <div id="quem-somos">
           <QuemSomos />
-          <ImageCarousel />
         </div>
       </HomeContainer>
+      <ImageCarousel />
     </div>
   );
 }
