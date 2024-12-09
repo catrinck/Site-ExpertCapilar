@@ -29,7 +29,8 @@ const ProfissionaisContainer = styled.div`
 `;
 
 const CardWrapper = styled.div`
-  perspective: 1000px; /* Necessário para rotação 3D */
+  perspective: 1000px;
+  position: relative;
 
   @media (max-width: 768px) {
     position: relative;
@@ -45,7 +46,6 @@ const ProfissionalCard = styled.div`
   transform: ${({ flipped }) => (flipped ? 'rotateY(180deg)' : 'rotateY(0)')};
   cursor: pointer;
 `;
-
 
 const CardFront = styled.div`
   background: #2D2D2D;
@@ -133,23 +133,50 @@ const HorarioCard = styled.div`
   }
 `;
 
-const Seta = styled.div`
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 24px;
-  width: 50px;
-  height: 50px;
+const Seta = styled.button`
+  position: absolute; // Changed from relative
+  bottom: 20px;
+  right: 20px;
+  width: 45px;
+  height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.1);
+  background: #FF342B;
+  border: none;
   border-radius: 50%;
-  color: #FFFFFF;
   cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  padding: 0;
+  transform: ${({ flipped }) => flipped ? 'rotateY(180deg)' : 'rotateY(0)'}; // Add this
   
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: white;
+    stroke-width: 2;
+    transition: transform 0.3s ease;
+  }
+
   &:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #e52e26;
+    transform: ${({ flipped }) => flipped ? 'rotateY(180deg) scale(1.1)' : 'scale(1.1)'}; // Update this
+    
+    svg {
+      transform: translateX(2px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 40px;
+    
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
@@ -291,21 +318,12 @@ function Pesquisa() {
                 <Nome>{profissional.nome}</Nome>
                 <Info>{profissional.info1}</Info>
                 <Info>{profissional.info2}</Info>
-                <Seta
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleCardFlip(index);
-                  }}
-                >
-                  ⮞
-                </Seta>
               </CardFront>
               <CardBack>
                 <Nome>Horários Disponíveis Hoje</Nome>
                 <HorariosContainer>
                   {horarios.map((horario, i) => {
                     const horarioDesabilitado = isHorarioConfirmado(horario, profissional.nome);
-
                     return (
                       <HorarioCard
                         key={i}
@@ -329,27 +347,31 @@ function Pesquisa() {
                     );
                   })}
                 </HorariosContainer>
-                <Seta
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleCardFlip(index);
-                  }}
-                >
-                  ⮜
-                </Seta>
               </CardBack>
             </ProfissionalCard>
+            <Seta
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleCardFlip(index);
+              }}
+              flipped={flippedCards[index]}
+              aria-label="Ver horários"
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </Seta>
           </CardWrapper>
         ))}
       </ProfissionaisContainer>
 
-      {/* Modal de Agendamento */}
       <ModalAgendamento
         isOpen={modalOpen}
         onClose={closeModal}
         onConfirm={handleConfirm}
         data={modalData}
       />
+      {notification && <Notification message={notification} />}
     </div>
   );
 }
