@@ -34,9 +34,9 @@ function IconesHeader() {
       <IconeContainer>
         <IconeTexto>Entre em contato</IconeTexto>
         <a
-                    href="https://wa.me/92986153537?text=Olá, gostaria de saber mais informações!"
-                    target="_blank"
-                    rel="noopener noreferrer"
+          href="https://wa.me/92986153537?text=Olá, gostaria de saber mais informações!"
+          target="_blank"
+          rel="noopener noreferrer"
                 >
         <Icone src={whatsapp} alt="WhatsApp" />
                 </a>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const NotificationContainer = styled.div`
@@ -40,10 +40,22 @@ const NotificationContainer = styled.div`
 `;
 
 function Notification({ message, type, onClose }) {
-  React.useEffect(() => {
-    const timer = setTimeout(onClose, 3000); // Fecha a notificação automaticamente após 3 segundos
-    return () => clearTimeout(timer);
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    // Controla o fade-out e a remoção do componente
+    const fadeOutTimer = setTimeout(() => setVisible(false), 2700); // Inicia o fade-out antes de remover
+    const removeTimer = setTimeout(onClose, 3000); // Remove após o fade-out
+
+    return () => {
+      clearTimeout(fadeOutTimer);
+      clearTimeout(removeTimer);
+    };
   }, [onClose]);
+
+  if (!visible) {
+    return null; // Garante que o componente seja desmontado após o fade-out
+  }
 
   return <NotificationContainer type={type}>{message}</NotificationContainer>;
 }

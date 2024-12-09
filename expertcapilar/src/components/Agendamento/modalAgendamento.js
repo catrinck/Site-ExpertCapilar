@@ -115,6 +115,7 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
   const [telefone, setTelefone] = React.useState('');
   const [shouldRender, setShouldRender] = React.useState(isOpen);
   const [notification, setNotification] = React.useState(null); // Estado para a notificação
+  const [isNotificationVisible, setIsNotificationVisible] = React.useState(false); // Controla a visibilidade da notificação
 
   // Reseta os campos quando o modal for aberto
   React.useEffect(() => {
@@ -127,6 +128,18 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  React.useEffect(() => {
+    if (notification) {
+      setIsNotificationVisible(true); // Exibe a notificação
+      const timer = setTimeout(() => {
+        setIsNotificationVisible(false); // Oculta a notificação
+        setNotification(null); // Reseta o estado após a animação
+      }, 3000); // 3 segundos de exibição
+
+      return () => clearTimeout(timer); // Limpa o timer ao desmontar
+    }
+  }, [notification]);
 
   const handleConfirm = () => {
     const telefoneSemMascara = telefone.replace(/\D/g, '');
@@ -154,15 +167,23 @@ function ModalAgendamento({ isOpen, onClose, onConfirm, data }) {
       message: 'Agendamento criado com sucesso!',
       type: 'success', // Define como sucesso
     });
+
+    setTimeout(() => {
+      onClose();
+    }, 500); // Tempo curto para sincronizar com a notificação
+
+    
+
+    
   };
 
   return (
     <>
-      {notification && (
+      {isNotificationVisible && notification && (
         <Notification
           message={notification.message}
-          type={notification.type} // Passa o tipo para estilizar (erro ou sucesso)
-          onClose={() => setNotification(null)} // Fecha após 3 segundos
+          type={notification.type}
+          onClose={() => setIsNotificationVisible(false)}
         />
       )}
 
