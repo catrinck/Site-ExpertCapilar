@@ -76,6 +76,45 @@ const Content = styled.div`
   }
 `;
 
+const StyledLink = styled.a`
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #FFF; /* Azul padrão para links */
+  text-decoration: ;
+  margin-bottom: 10px;
+
+  &:hover {
+    text-decoration: underline;
+    color: #81a4f1; /* Um azul mais claro no hover */
+  }
+`;
+
+const AddressContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: baseline; /* Alinha pela base do texto */
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  color: #FFF;
+  margin-bottom: px;
+  gap: 5px;
+  
+  a {
+    margin-left: 5px; /* Espaçamento entre o texto e o link */
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    color: #FFF;
+    text-decoration: underline;
+
+    &:hover {
+      text-decoration: underline;
+      color: #81a4f1; /* Um azul mais claro no hover */
+    }
+  }
+`;
+
+
 function QuemSomos() {
   return (
     <Section>
@@ -83,7 +122,16 @@ function QuemSomos() {
       <Content>
         <AboutLogo />
         <Title>Quem Somos</Title>
-        <p>Av. Ramos Ferreira, 1416 </p>
+        <AddressContainer>
+          <span>Onde estamos:</span>
+          <StyledLink 
+            href="https://www.google.com/maps?q=Av.+Ramos+Ferreira,+1416" 
+            target="_blank" 
+            rel="noopener noreferrer"
+          >
+            Av. Ramos Ferreira, 1416
+          </StyledLink>
+        </AddressContainer>
         <p>Centro, Manaus, AM</p>
         <p>Contato: (92)98615-3537</p>
         <p>Na Expert Capilar, somos mais que uma barbearia: somos uma família unida pela paixão de cuidar do 
