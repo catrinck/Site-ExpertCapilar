@@ -1,5 +1,6 @@
-import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import ModalCalendar from '../Agendamento/modalCalendar';
 
 const Opcao = styled.li`
      font-size: 22px;
@@ -45,36 +46,64 @@ const textoOpcoes = [
 ];
  
 function OpcoesHeader() {
-  return (
-    <Opcoes>
-      {textoOpcoes.map(({ texto, href, externo }, index) =>
-  !externo ? ( // Links internos (rolagem na página)
-    <LinkStyled
-      as="a"
-      href={`#${href}`} // Adiciona "#" para referenciar IDs na página
-      key={index}
-    >
-      <Opcao>
-        <p>{texto}</p>
-      </Opcao>
-    </LinkStyled>
-  ) : ( // Links externos (abrem uma nova página)
-    <LinkStyled
-      as="a"
-      href={href}
-      key={index}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      <Opcao>
-        <p>{texto}</p>
-      </Opcao>
-    </LinkStyled>
-  )
-)}
+  const [calendarOpen, setCalendarOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
-    </Opcoes>
+  const handleClick = (e, href, externo) => {
+    if (href === 'agendamentos') {
+      e.preventDefault();
+      setCalendarOpen(true);
+    } else if (!externo) {
+      e.preventDefault();
+      const element = document.getElementById(href);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
+  };
+
+  return (
+    <>
+      <Opcoes>
+        {textoOpcoes.map(({ texto, href, externo }, index) =>
+          !externo ? (
+            <LinkStyled
+              as="a"
+              href={`#${href}`}
+              key={index}
+              onClick={(e) => handleClick(e, href, externo)}
+            >
+              <Opcao>
+                <p>{texto}</p>
+              </Opcao>
+            </LinkStyled>
+          ) : (
+            <LinkStyled
+              as="a"
+              href={href}
+              key={index}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Opcao>
+                <p>{texto}</p>
+              </Opcao>
+            </LinkStyled>
+          )
+        )}
+      </Opcoes>
+
+      <ModalCalendar
+        isOpen={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
+      />
+    </>
   );
 }
-   
+
 export default OpcoesHeader;
