@@ -35,10 +35,10 @@ const ModalContent = styled.div`
 
   @media (max-width: 768px) {
     width: 95%;
-    max-width: 82%;
+    max-width: 87%;
     border-radius: 15px 15px 0 0;
     padding: 20px 15px;
-    max-height: 55vh;
+    max-height: 60vh;
   }
 
   h2 {
