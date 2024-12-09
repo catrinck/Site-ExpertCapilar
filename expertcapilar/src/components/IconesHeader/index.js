@@ -6,18 +6,27 @@ import styled from 'styled-components'
 const IconeContainer = styled.div`
   display: flex;
   flex-direction: row;
-  margin-left: -230px; /* Move 15px pra esquerda */
-  align-items: center; /* Centraliza os ícones com o texto */
-  gap: 10px;
+  margin-left: -337px; 
+  align-items: center; 
+  gap: 15px;
+  @media (max-width: 768px) {
+    margin-left: -237px; 
+  }
 `;
 
 const IconeTexto = styled.p`
   font-size: 18px;
   font-family: 'Poppins', sans-serif;
-  margin-left: -237px; /* Move 15px pra esquerda */
+  margin-left: -337px; 
   color: white;
-  margin-bottom: 0; /* Remove a margem inferior */
-  text-align: center; /* Centraliza o texto */
+  margin-top: 5px;
+  margin-bottom: 5px; 
+  text-align: center; 
+
+  @media (max-width: 768px) {
+    margin-left: -237px; 
+    margin-top: 5px
+  }
 `;
 
 const Icone = styled.img`

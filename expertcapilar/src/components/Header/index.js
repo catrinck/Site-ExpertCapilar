@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 /* @media = modificações para a versão mobile */
 
-const HeaderContatiner = styled.header`
+const HeaderContainer = styled.header`
     background-color: #1b1b1b;
     display: flex;
     justify-content: space-between;
@@ -16,13 +16,16 @@ const HeaderContatiner = styled.header`
     height: 130px;
     width: 100%;
     max-width: 100vw;
-    overflow-x: hidden;
+    overflow: hidden; 
+    position: relative; 
+
 
     @media (max-width: 768px) {
         flex-direction: row;
         height: auto;
         padding: 10px;
         justify-content: space-between; 
+        overflow: hidden;
     }
 `;
 
@@ -68,7 +71,7 @@ const AppContainer = styled.div`
 function Header() {
     return (
         <AppContainer>
-            <HeaderContatiner>
+            <HeaderContainer>
                 <LogoContainer>
                 <Link to='/'>
                     <HeaderLogo />
@@ -80,7 +83,7 @@ function Header() {
                 <IconesContainer>
                     <IconesHeader />
                 </IconesContainer>
-            </HeaderContatiner>
+            </HeaderContainer>
         </AppContainer>
     );
 }
