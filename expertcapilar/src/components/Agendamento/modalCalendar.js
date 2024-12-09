@@ -17,7 +17,8 @@ const ModalOverlay = styled.div`
   overflow: hidden; 
   
   @media (max-width: 768px) {
-    align-items: flex-end;
+    align-items: center;
+    width: 100%;
   }
 `;
 
@@ -33,7 +34,7 @@ const ModalContent = styled.div`
   max-height: 90vh;
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 95%;
     max-width: 90%;
     border-radius: 15px 15px 0 0;
     padding: 20px 15px;

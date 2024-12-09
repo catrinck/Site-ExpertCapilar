@@ -32,6 +32,16 @@ const ModalContent = styled.div`
   transition: transform 0.4s ease, opacity 0.4s ease;
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
   z-index: 1001;
+
+  @media (max-width: 768px) {
+  width: 80%; /* Ajusta o tamanho em telas menores */
+  padding: 20px; /* Reduz o padding */
+}
+
+  @media (max-width: 480px) {
+    width: 80%; /* Ajusta mais ainda para telas muito pequenas */
+    padding: 15px;
+  }
 `;
 
 const Input = styled.input`
