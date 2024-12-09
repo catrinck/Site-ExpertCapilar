@@ -1,47 +1,59 @@
 import whatsapp from '../../assets/whatsapp.svg'
+import instagram from '../../assets/instagram.svg'
 import styled from 'styled-components'
 
 
-/* ICONE DO WHATSAPP */
 const IconeContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 40px;
+  flex-direction: row;
+  margin-left: -230px; /* Move 15px pra esquerda */
+  align-items: center; /* Centraliza os ícones com o texto */
+  gap: 10px;
 `;
 
 const IconeTexto = styled.p`
   font-size: 18px;
   font-family: 'Poppins', sans-serif;
+  margin-left: -237px; /* Move 15px pra esquerda */
   color: white;
-  margin: 0 0 5px; 
-  text-align: center;
+  margin-bottom: 0; /* Remove a margem inferior */
+  text-align: center; /* Centraliza o texto */
 `;
 
 const Icone = styled.img`
   width: 30px;
 `;
 
-const Icones = styled.div`
+const IconesWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  text-align: center;
+  gap: 5px; /* Espaçamento entre texto e ícones */
 `;
 
 function IconesHeader() {
   return (
-    <Icones>
+    <IconesWrapper>
+      <IconeTexto>Entre em contato</IconeTexto>
       <IconeContainer>
-        <IconeTexto>Entre em contato</IconeTexto>
         <a
           href="https://wa.me/92986153537?text=Olá, gostaria de saber mais informações!"
           target="_blank"
           rel="noopener noreferrer"
-                >
-        <Icone src={whatsapp} alt="WhatsApp" />
-                </a>
+        >
+          <Icone src={whatsapp} alt="WhatsApp" />
+        </a>
+        <a
+          href="https://www.instagram.com/barbeariaexpertcapilar/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icone src={instagram} alt="Instagram" />
+        </a>
       </IconeContainer>
-    </Icones>
+    </IconesWrapper>
   );
 }
 
