@@ -83,7 +83,7 @@ const MaskedInput = styled(InputMask)`
 const Button = styled.button`
   margin-top: 20px;
   padding: 12px 24px;
-  background-color: #007bff;
+  background-color: #FF342B;
   color: white;
   border: none;
   border-radius: 8px;
@@ -92,12 +92,12 @@ const Button = styled.button`
   transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #0056b3;
+    background-color: #E52E26 ;
     transform: scale(1.05);
   }
 
   &:active {
-    background-color: #004494;
+    background-color: #FF342B ;
     transform: scale(0.95);
   }
 `;
@@ -108,7 +108,7 @@ const CloseButton = styled.button`
   right: 10px;
   background: none;
   border: none;
-  color: #ffffff;
+  color: #FF342B ;
   font-size: 20px;
   font-weight: bold;
   cursor: pointer;

@@ -327,7 +327,10 @@ const ModalFlow = ({ isOpen, onClose }) => {
 
 {step === 3 && (
   <>
-    <h2>Horários Disponíveis Hoje</h2>
+    <h2>Horários Disponíveis </h2>
+    <p style={{ color: '#AAAAAA', marginBottom: '20px' }}>
+      Data selecionada: {selectedDate ? selectedDate.toLocaleDateString() : ''}
+    </p>
     <div
       className="grid"
       style={{
