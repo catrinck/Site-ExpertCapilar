@@ -226,6 +226,14 @@ const ModalFlow = ({ isOpen, onClose }) => {
   const [selectedHorario, setSelectedHorario] = useState(null);
   const [isModalAgendamentoOpen, setIsModalAgendamentoOpen] = useState(false);
 
+  const resetStates = () => {
+    setStep(1); // Volta para o primeiro passo
+    setSelectedDate(null);
+    setSelectedBarbeiro(null);
+    setSelectedHorario(null);
+    setIsModalAgendamentoOpen(false); // Fecha o modal de agendamento
+  };
+
 
   useEffect(() => {
     if (isOpen) {
@@ -373,6 +381,7 @@ const ModalFlow = ({ isOpen, onClose }) => {
     isOpen={isModalAgendamentoOpen}
     onClose={() => {
       setIsModalAgendamentoOpen(false); // Fecha o modal
+      resetStates();
       onClose(); // Fecha todo o fluxo, se necessário
     }}
     onConfirm={(nome, telefone) => {
@@ -384,6 +393,7 @@ const ModalFlow = ({ isOpen, onClose }) => {
         selectedHorario,
       });
       setIsModalAgendamentoOpen(false); // Fecha o modal após confirmação
+      resetStates();
       onClose(); // Finaliza o fluxo completo
     }}
     data={{
