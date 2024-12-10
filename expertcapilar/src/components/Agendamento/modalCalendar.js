@@ -1,7 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { horarios } from './horarios';
+import DG from '../../assets/DG/DG.JPG'
+import yohann from '../../assets/DoCarmo/yohann.jpg'
+import Henry from '../../assets/Henry/Henry.JPG'
+import Silvio from '../../assets/Silvio/silvio.jpg'
+import ModalAgendamento from './modalAgendamento';
+import Notification from '../Notification/index';
+
+const barbeiros = [
+  { nome: 'Silvio', especialidade: 'Cabelos Curly', experiencia: '10 anos', foto: Silvio},
+  { nome: 'DG', especialidade: 'Barba', experiencia: '3 anos', foto: DG },
+  { nome: 'Yohann do Carmo', especialidade: 'Cortes Modernos', experiencia: '4 anos', foto: yohann },
+  { nome: 'Henry André', especialidade: 'Degradê', experiencia: '6 anos', foto: Henry}
+];
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -197,6 +211,7 @@ const Button = styled.button`
   }
 `;
 
+
 const StyledDatePicker = styled(DatePicker)`
   width: 100%;
   padding: 10px;
@@ -205,48 +220,198 @@ const StyledDatePicker = styled(DatePicker)`
   text-align: center;
   background: transparent;
 `;
-const ModalCalendar = ({ isOpen, onClose, selectedDate, setSelectedDate }) => {
+const ModalFlow = ({ isOpen, onClose }) => {
+  const [step, setStep] = useState(1); // Controla os passos: 1 = Data, 2 = Barbeiro, 3 = Horário
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedBarbeiro, setSelectedBarbeiro] = useState(null);
+  const [selectedHorario, setSelectedHorario] = useState(null);
+  const [isModalAgendamentoOpen, setIsModalAgendamentoOpen] = useState(false);
+
+  const resetStates = () => {
+    setStep(1); // Volta para o primeiro passo
+    setSelectedDate(null);
+    setSelectedBarbeiro(null);
+    setSelectedHorario(null);
+    setIsModalAgendamentoOpen(false); // Fecha o modal de agendamento
+  };
+
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-
-      return () => {
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.width = '';
-      };
+      return () => (document.body.style.overflow = '');
     }
   }, [isOpen]);
-
   if (!isOpen) return null;
 
+  const handleNextStep = () => setStep(step + 1);
+  const handlePreviousStep = () => setStep(step - 1);
+
   const handleConfirm = () => {
+    console.log('Data:', selectedDate);
+    console.log('Barbeiro:', selectedBarbeiro);
+    console.log('Horário:', selectedHorario);
     onClose();
   };
 
   return (
     <ModalOverlay>
       <ModalContent>
-        <h2>Selecione uma Data</h2>
-        <StyledDatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          inline
-          minDate={new Date()}
-          dayClassName={(date) => {
-            const isOutsideMonth = date.getMonth() !== selectedDate.getMonth();
-            return isOutsideMonth ? 'outside-month' : '';
-          }}
-        />
+        {step === 1 && (
+          <>
+            <h2>Selecione uma Data</h2>
+            <DatePicker
+              selected={selectedDate}
+              onChange={(date) => setSelectedDate(date)}
+              inline
+              minDate={new Date()}
+            />
+            <ButtonContainer>
+              <Button onClick={onClose}>Cancelar</Button>
+              <Button primary onClick={handleNextStep} disabled={!selectedDate}>
+                Confirmar
+              </Button>
+            </ButtonContainer>
+          </>
+        )}
+
+{step === 2 && (
+      <>
+        {/* Conteúdo do Pop-up de Barbeiros */}
+        <h2>Escolha seu Barbeiro</h2>
+        <div className="grid" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {barbeiros.map((barbeiro, index) => (
+            <button
+              key={index}
+              onClick={() => setSelectedBarbeiro(barbeiro.nome)}
+              className={selectedBarbeiro === barbeiro.nome ? 'selected' : ''}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+                padding: '15px',
+                background: selectedBarbeiro === barbeiro.nome ? '#FF342B' : '#2D2D2D',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                cursor: 'pointer',
+                transition: 'background 0.3s',
+              }}
+            >
+              <img
+                src={barbeiro.foto}
+                alt={barbeiro.nome}
+                style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+              <div style={{ textAlign: 'left' }}>
+                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{barbeiro.nome}</h3>
+                <p style={{ margin: 0, fontSize: '14px', color: '#AAAAAA' }}>{barbeiro.especialidade}</p>
+              </div>
+            </button>
+          ))}
+        </div>
         <ButtonContainer>
-          <Button onClick={onClose}>Cancelar</Button>
-          <Button primary onClick={handleConfirm}>Confirmar</Button>
+          <Button onClick={handlePreviousStep}>Voltar</Button>
+          <Button primary onClick={handleNextStep} disabled={!selectedBarbeiro}>
+            Confirmar
+          </Button>
         </ButtonContainer>
-      </ModalContent>
-    </ModalOverlay>
+      </>
+    )}
+
+
+{step === 3 && (
+  <>
+    <h2>Horários Disponíveis </h2>
+    <p style={{ color: '#AAAAAA', marginBottom: '20px' }}>
+      Data selecionada: {selectedDate ? selectedDate.toLocaleDateString() : ''}
+    </p>
+    <div
+      className="grid"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: '15px',
+        justifyItems: 'center',
+        alignItems: 'center',
+      }}
+    >
+      {horarios.map((horario) => (
+        <button
+          key={horario}
+          onClick={() => setSelectedHorario(horario)}
+          className={selectedHorario === horario ? 'selected' : ''}
+          style={{
+            padding: '10px 15px',
+            fontSize: '16px',
+            color: selectedHorario === horario ? 'white' : '#FFFFFF',
+            background: selectedHorario === horario ? '#FF342B' : '#2D2D2D',
+            border: '1px solid #404040',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            transition: 'background 0.3s, transform 0.2s',
+          }}
+        >
+          {horario}
+        </button>
+      ))}
+    </div>
+    <ButtonContainer>
+      <Button onClick={() => setStep(2)}>Voltar</Button>
+      <Button
+        primary
+        onClick={() => {
+          if (selectedHorario) {
+            setIsModalAgendamentoOpen(true); // Abre o modal do step 4
+            setStep(4); // Atualiza o step
+          }
+        }}
+        disabled={!selectedHorario}
+      >
+        Confirmar
+      </Button>
+    </ButtonContainer>
+  </>
+)}
+
+{step === 4 && (
+  <ModalAgendamento
+    isOpen={isModalAgendamentoOpen}
+    onClose={() => {
+      setIsModalAgendamentoOpen(false); // Fecha o modal
+      resetStates();
+      onClose(); // Fecha todo o fluxo, se necessário
+    }}
+    
+    onConfirm={(nome, telefone) => {
+      console.log('Agendamento Confirmado:', {
+        nome,
+        telefone,
+        selectedDate,
+        selectedBarbeiro,
+        selectedHorario,
+      });
+      setIsModalAgendamentoOpen(false); // Fecha o modal após confirmação
+      resetStates();
+      onClose(); // Finaliza o fluxo completo
+    }}
+    data={{
+      profissional: selectedBarbeiro,
+      data: selectedDate?.toLocaleDateString(),
+      horario: selectedHorario,
+    }}
+  />
+)}
+
+
+  </ModalContent>
+</ModalOverlay>
   );
 };
 
-export default ModalCalendar;
+export default ModalFlow;
