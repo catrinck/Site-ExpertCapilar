@@ -220,14 +220,17 @@ const StyledDatePicker = styled(DatePicker)`
   text-align: center;
   background: transparent;
 `;
+
+
 const ModalFlow = ({ isOpen, onClose }) => {
-  const [step, setStep] = useState(1); // Controla os passos: 1 = Data, 2 = Barbeiro, 3 = Horário
+  const [step, setStep] = useState(1); 
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedBarbeiro, setSelectedBarbeiro] = useState(null);
   const [selectedHorario, setSelectedHorario] = useState(null);
   const [isModalAgendamentoOpen, setIsModalAgendamentoOpen] = useState(false);
   const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
   const [notification, setNotification] = useState(null);
+  const [isNotificationVisible, setIsNotificationVisible] = useState(false);
   const [horariosDoDia, setHorariosDoDia] = useState([
     "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", 
     "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", 
@@ -244,6 +247,18 @@ const ModalFlow = ({ isOpen, onClose }) => {
     setIsModalAgendamentoOpen(false);
   };
 
+  useEffect(() => {
+    if (notification) {
+      setIsNotificationVisible(true);
+      const timer = setTimeout(() => {
+        setIsNotificationVisible(false);
+        setNotification(null);
+
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [notification]);
+
   // Função para buscar horários disponíveis no backend
   const fetchHorariosDisponiveis = async () => {
     if (!selectedBarbeiro || !selectedDate) return;
@@ -257,48 +272,86 @@ const ModalFlow = ({ isOpen, onClose }) => {
       if (response.ok) {
         const data = await response.json();
   
-        // Criar lista completa com status de indisponível
+        // Monta a lista de horários marcando como disabled os que não estão disponíveis
         const horariosAtualizados = horariosDoDia.map((horario) => ({
           time: horario,
           disabled: !data.horariosDisponiveis.includes(horario),
         }));
-  
         setHorariosDisponiveis(horariosAtualizados);
       } else {
-        setNotification('Erro ao buscar horários. Tente novamente.');
+        const errorText = await response.text();
+        setNotification({ message: `Erro ao buscar horários: ${errorText}`, type: 'error' });
       }
     } catch (error) {
       console.error('Erro ao buscar horários:', error);
-      setNotification('Erro de conexão com o servidor.');
+      setNotification({ message: 'Erro de conexão com o servidor.', type: 'error' });
     }
   };
 
   useEffect(() => {
     if (step === 3) {
-      fetchHorariosDisponiveis(); // Busca horários disponíveis ao entrar no passo 3
+      fetchHorariosDisponiveis();
     }
   }, [step]);
+
 
   const handleNextStep = () => setStep(step + 1);
   const handlePreviousStep = () => setStep(step - 1);
 
-  const handleConfirmAgendamento = (nome, telefone) => {
-    console.log('Agendamento Confirmado:', {
-      nome,
-      telefone,
-      selectedDate,
-      selectedBarbeiro,
-      selectedHorario,
+  const handleConfirmAgendamento = async (nome, telefone) => {
+    const formattedDate = selectedDate.toISOString().split('T')[0];
+
+    console.log("Tentando criar agendamento com:", {
+      cliente_nome: nome,
+      cliente_telefone: telefone,
+      data_agendamento: formattedDate,
+      hora_agendamento: selectedHorario,
+      profissional: selectedBarbeiro,
     });
-    resetStates();
-    onClose();
-  };
+
+    try {
+      const response = await fetch("https://expert-capilar-backend.onrender.com/agendamentos", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cliente_nome: nome,
+          cliente_telefone: telefone,
+          data_agendamento: formattedDate,
+          hora_agendamento: selectedHorario,
+          profissional: selectedBarbeiro,
+        }),
+      });
+
+      if (response.ok) {
+        setNotification({ message: "Agendamento criado com sucesso!", type: "success" });
+        setTimeout(() => {
+            setNotification(null);
+            resetStates(); // Reseta os estados do componente
+            setIsModalAgendamentoOpen(false); // Fecha o modal de agendamento
+            onClose(); // Fecha o modal principal
+        }, 2000); // Tempo para a notificação desaparecer
+    } else {
+        const errorText = await response.text();
+        setNotification({ message: `Erro ao criar agendamento: ${errorText}`, type: "error" });
+    }
+} catch (error) {
+    console.error("Erro ao criar agendamento:", error);
+    setNotification({ message: "Erro na comunicação com o servidor. Tente novamente mais tarde.", type: "error" });
+}
+};
 
   if (!isOpen) return null;
 
   return (
     <ModalOverlay>
       <ModalContent>
+        {/* Exibe a notificação se existir */}
+        {notification && (
+          <Notification message={notification.message} type={notification.type} />
+        )}
+
         {step === 1 && (
           <>
             <h2>Selecione uma Data</h2>
@@ -317,148 +370,130 @@ const ModalFlow = ({ isOpen, onClose }) => {
           </>
         )}
 
-{step === 2 && (
-      <>
-        {/* Conteúdo do Pop-up de Barbeiros */}
-        <h2>Escolha seu Barbeiro</h2>
-        <div className="grid" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          {barbeiros.map((barbeiro, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedBarbeiro(barbeiro.nome)}
-              className={selectedBarbeiro === barbeiro.nome ? 'selected' : ''}
+        {step === 2 && (
+          <>
+            <h2>Escolha seu Barbeiro</h2>
+            <div className="grid" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              {barbeiros.map((barbeiro, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedBarbeiro(barbeiro.nome)}
+                  className={selectedBarbeiro === barbeiro.nome ? 'selected' : ''}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    padding: '15px',
+                    background: selectedBarbeiro === barbeiro.nome ? '#FF342B' : '#2D2D2D',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'background 0.3s',
+                  }}
+                >
+                  <img
+                    src={barbeiro.foto}
+                    alt={barbeiro.nome}
+                    style={{
+                      width: '50px',
+                      height: '50px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                  <div style={{ textAlign: 'left' }}>
+                    <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{barbeiro.nome}</h3>
+                    <p style={{ margin: 0, fontSize: '14px', color: '#AAAAAA' }}>{barbeiro.especialidade}</p>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <ButtonContainer>
+              <Button onClick={handlePreviousStep}>Voltar</Button>
+              <Button primary onClick={handleNextStep} disabled={!selectedBarbeiro}>
+                Confirmar
+              </Button>
+            </ButtonContainer>
+          </>
+        )}
+
+        {step === 3 && (
+          <>
+            <h2>Horários Disponíveis </h2>
+            <p style={{ color: '#AAAAAA', marginBottom: '20px' }}>
+              Data selecionada: {selectedDate ? selectedDate.toLocaleDateString() : ''}
+            </p>
+            <div
+              className="grid"
               style={{
-                display: 'flex',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: '15px',
+                justifyItems: 'center',
                 alignItems: 'center',
-                gap: '10px',
-                padding: '15px',
-                background: selectedBarbeiro === barbeiro.nome ? '#FF342B' : '#2D2D2D',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                cursor: 'pointer',
-                transition: 'background 0.3s',
               }}
             >
-              <img
-                src={barbeiro.foto}
-                alt={barbeiro.nome}
-                style={{
-                  width: '50px',
-                  height: '50px',
-                  borderRadius: '50%',
-                  objectFit: 'cover',
+              {horariosDisponiveis.map(({ time, disabled }) => (
+                <button
+                  key={time}
+                  onClick={!disabled ? () => setSelectedHorario(time) : null}
+                  className={selectedHorario === time ? 'selected' : ''}
+                  style={{
+                    padding: '10px 15px',
+                    fontSize: '16px',
+                    color: disabled ? '#666' : selectedHorario === time ? 'white' : '#FFFFFF',
+                    background: disabled
+                      ? '#404040'
+                      : selectedHorario === time
+                      ? '#FF342B'
+                      : '#2D2D2D',
+                    border: '1px solid #404040',
+                    borderRadius: '8px',
+                    cursor: disabled ? 'not-allowed' : 'pointer',
+                    transition: 'background 0.3s, transform 0.2s',
+                    opacity: disabled ? 0.6 : 1,
+                  }}
+                  disabled={disabled}
+                >
+                  {time}
+                </button>
+              ))}
+            </div>
+            <ButtonContainer>
+              <Button onClick={() => setStep(2)}>Voltar</Button>
+              <Button
+                primary
+                onClick={() => {
+                  if (selectedHorario) {
+                    setIsModalAgendamentoOpen(true); // Abre o modal do step 4
+                    setStep(4); // Atualiza o step
+                  }
                 }}
-              />
-              <div style={{ textAlign: 'left' }}>
-                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 'bold' }}>{barbeiro.nome}</h3>
-                <p style={{ margin: 0, fontSize: '14px', color: '#AAAAAA' }}>{barbeiro.especialidade}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-        <ButtonContainer>
-          <Button onClick={handlePreviousStep}>Voltar</Button>
-          <Button primary onClick={handleNextStep} disabled={!selectedBarbeiro}>
-            Confirmar
-          </Button>
-        </ButtonContainer>
-      </>
-    )}
+                disabled={!selectedHorario}
+              >
+                Confirmar
+              </Button>
+            </ButtonContainer>
+          </>
+        )}
 
-
-{step === 3 && (
-  <>
-    <h2>Horários Disponíveis </h2>
-    <p style={{ color: '#AAAAAA', marginBottom: '20px' }}>
-      Data selecionada: {selectedDate ? selectedDate.toLocaleDateString() : ''}
-    </p>
-    <div
-      className="grid"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '15px',
-        justifyItems: 'center',
-        alignItems: 'center',
-      }}
-    >
-      {horariosDisponiveis.map(({ time, disabled }) => (
-    <button
-      key={time}
-      onClick={!disabled ? () => setSelectedHorario(time) : null}
-      className={selectedHorario === time ? 'selected' : ''}
-      style={{
-        padding: '10px 15px',
-        fontSize: '16px',
-        color: disabled ? '#666' : selectedHorario === time ? 'white' : '#FFFFFF',
-        background: disabled
-          ? '#404040'
-          : selectedHorario === time
-          ? '#FF342B'
-          : '#2D2D2D',
-        border: '1px solid #404040',
-        borderRadius: '8px',
-        cursor: disabled ? 'not-allowed' : 'pointer',
-        transition: 'background 0.3s, transform 0.2s',
-        opacity: disabled ? 0.6 : 1,
-      }}
-      disabled={disabled}
-    >
-      {time}
-    </button>
-  ))}
-</div>
-    <ButtonContainer>
-      <Button onClick={() => setStep(2)}>Voltar</Button>
-      <Button
-        primary
-        onClick={() => {
-          if (selectedHorario) {
-            setIsModalAgendamentoOpen(true); // Abre o modal do step 4
-            setStep(4); // Atualiza o step
-          }
-        }}
-        disabled={!selectedHorario}
-      >
-        Confirmar
-      </Button>
-    </ButtonContainer>
-  </>
-)}
-
-{step === 4 && (
-  <ModalAgendamento
-    isOpen={isModalAgendamentoOpen}
-    onClose={() => {
-      setIsModalAgendamentoOpen(false); // Fecha o modal
-      resetStates();
-      onClose(); // Fecha todo o fluxo, se necessário
-    }}
-    
-    onConfirm={(nome, telefone) => {
-      console.log('Agendamento Confirmado:', {
-        nome,
-        telefone,
-        selectedDate,
-        selectedBarbeiro,
-        selectedHorario,
-      });
-      setIsModalAgendamentoOpen(false); // Fecha o modal após confirmação
-      resetStates();
-      onClose(); // Finaliza o fluxo completo
-    }}
-    data={{
-      profissional: selectedBarbeiro,
-      data: selectedDate?.toLocaleDateString(),
-      horario: selectedHorario,
-    }}
-  />
-)}
-
-
-  </ModalContent>
-</ModalOverlay>
+        {step === 4 && (
+          <ModalAgendamento
+            isOpen={isModalAgendamentoOpen}
+            onClose={() => {
+              setIsModalAgendamentoOpen(false);
+            }}
+            onConfirm={(nome, telefone) => handleConfirmAgendamento(nome, telefone)}
+            data={{
+              profissional: selectedBarbeiro,
+              data: selectedDate?.toLocaleDateString(),
+              horario: selectedHorario,
+            }}
+          />
+        )}
+      </ModalContent>
+    </ModalOverlay>
   );
 };
 
