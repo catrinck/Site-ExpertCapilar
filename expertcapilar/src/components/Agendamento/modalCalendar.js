@@ -8,6 +8,7 @@ import yohann from '../../assets/DoCarmo/yohann.jpg'
 import Henry from '../../assets/Henry/Henry.JPG'
 import Silvio from '../../assets/Silvio/silvio.jpg'
 import ModalAgendamento from './modalAgendamento';
+import Notification from '../Notification/index';
 
 const barbeiros = [
   { nome: 'Silvio', especialidade: 'Cabelos Curly', experiencia: '10 anos', foto: Silvio},
@@ -241,7 +242,6 @@ const ModalFlow = ({ isOpen, onClose }) => {
       return () => (document.body.style.overflow = '');
     }
   }, [isOpen]);
-
   if (!isOpen) return null;
 
   const handleNextStep = () => setStep(step + 1);
@@ -387,6 +387,7 @@ const ModalFlow = ({ isOpen, onClose }) => {
       resetStates();
       onClose(); // Fecha todo o fluxo, se necessário
     }}
+    
     onConfirm={(nome, telefone) => {
       console.log('Agendamento Confirmado:', {
         nome,
