@@ -483,6 +483,8 @@ const ModalFlow = ({ isOpen, onClose }) => {
             isOpen={isModalAgendamentoOpen}
             onClose={() => {
               setIsModalAgendamentoOpen(false);
+              onClose(true);
+              resetStates();
             }}
             onConfirm={(nome, telefone) => handleConfirmAgendamento(nome, telefone)}
             data={{
