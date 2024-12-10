@@ -226,33 +226,75 @@ const ModalFlow = ({ isOpen, onClose }) => {
   const [selectedBarbeiro, setSelectedBarbeiro] = useState(null);
   const [selectedHorario, setSelectedHorario] = useState(null);
   const [isModalAgendamentoOpen, setIsModalAgendamentoOpen] = useState(false);
+  const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
+  const [notification, setNotification] = useState(null);
+  const [horariosDoDia, setHorariosDoDia] = useState([
+    "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", 
+    "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", 
+    "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", 
+    "18:00", "18:30", "19:00"
+  ]);
 
   const resetStates = () => {
-    setStep(1); // Volta para o primeiro passo
+    setStep(1);
     setSelectedDate(null);
     setSelectedBarbeiro(null);
     setSelectedHorario(null);
-    setIsModalAgendamentoOpen(false); // Fecha o modal de agendamento
+    setHorariosDisponiveis([]);
+    setIsModalAgendamentoOpen(false);
   };
 
+  // Função para buscar horários disponíveis no backend
+  const fetchHorariosDisponiveis = async () => {
+    if (!selectedBarbeiro || !selectedDate) return;
+  
+    try {
+      const formattedDate = selectedDate.toISOString().split('T')[0];
+      const response = await fetch(
+        `https://expert-capilar-backend.onrender.com/agendamentos/disponibilidade?data_agendamento=${formattedDate}&profissional=${selectedBarbeiro}`
+      );
+  
+      if (response.ok) {
+        const data = await response.json();
+  
+        // Criar lista completa com status de indisponível
+        const horariosAtualizados = horariosDoDia.map((horario) => ({
+          time: horario,
+          disabled: !data.horariosDisponiveis.includes(horario),
+        }));
+  
+        setHorariosDisponiveis(horariosAtualizados);
+      } else {
+        setNotification('Erro ao buscar horários. Tente novamente.');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar horários:', error);
+      setNotification('Erro de conexão com o servidor.');
+    }
+  };
 
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      return () => (document.body.style.overflow = '');
+    if (step === 3) {
+      fetchHorariosDisponiveis(); // Busca horários disponíveis ao entrar no passo 3
     }
-  }, [isOpen]);
-  if (!isOpen) return null;
+  }, [step]);
 
   const handleNextStep = () => setStep(step + 1);
   const handlePreviousStep = () => setStep(step - 1);
 
-  const handleConfirm = () => {
-    console.log('Data:', selectedDate);
-    console.log('Barbeiro:', selectedBarbeiro);
-    console.log('Horário:', selectedHorario);
+  const handleConfirmAgendamento = (nome, telefone) => {
+    console.log('Agendamento Confirmado:', {
+      nome,
+      telefone,
+      selectedDate,
+      selectedBarbeiro,
+      selectedHorario,
+    });
+    resetStates();
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <ModalOverlay>
@@ -341,26 +383,32 @@ const ModalFlow = ({ isOpen, onClose }) => {
         alignItems: 'center',
       }}
     >
-      {horarios.map((horario) => (
-        <button
-          key={horario}
-          onClick={() => setSelectedHorario(horario)}
-          className={selectedHorario === horario ? 'selected' : ''}
-          style={{
-            padding: '10px 15px',
-            fontSize: '16px',
-            color: selectedHorario === horario ? 'white' : '#FFFFFF',
-            background: selectedHorario === horario ? '#FF342B' : '#2D2D2D',
-            border: '1px solid #404040',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            transition: 'background 0.3s, transform 0.2s',
-          }}
-        >
-          {horario}
-        </button>
-      ))}
-    </div>
+      {horariosDisponiveis.map(({ time, disabled }) => (
+    <button
+      key={time}
+      onClick={!disabled ? () => setSelectedHorario(time) : null}
+      className={selectedHorario === time ? 'selected' : ''}
+      style={{
+        padding: '10px 15px',
+        fontSize: '16px',
+        color: disabled ? '#666' : selectedHorario === time ? 'white' : '#FFFFFF',
+        background: disabled
+          ? '#404040'
+          : selectedHorario === time
+          ? '#FF342B'
+          : '#2D2D2D',
+        border: '1px solid #404040',
+        borderRadius: '8px',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        transition: 'background 0.3s, transform 0.2s',
+        opacity: disabled ? 0.6 : 1,
+      }}
+      disabled={disabled}
+    >
+      {time}
+    </button>
+  ))}
+</div>
     <ButtonContainer>
       <Button onClick={() => setStep(2)}>Voltar</Button>
       <Button
