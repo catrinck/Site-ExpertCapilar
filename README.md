@@ -1,0 +1,1 @@
+Projeto freelancer colaborativo entre amigos, feito para a barbearia Expert Capilar. Com o propósito de realizar agendamentos de clientes de forma facilitada, além de apresentar da melhor forma a barbearia e seus funcionários.
